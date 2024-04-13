@@ -71,6 +71,7 @@ class AuthMethods {
         .get();
 
       String studentname = snapshot.get('studentname');
+      print(studentname);
       // Do something with the studentname
 HelperFunction.setUserNameSF( studentname);
       res = "Success";
@@ -143,6 +144,15 @@ HelperFunction.setUserNameSF( studentname);
           // HelperFunction.setUserNameSF( fullName);
           HelperFunction.setUserEmailSF( email); 
           HelperFunction.setUserType("teacher");
+
+          DocumentSnapshot snapshot = await _firestore
+        .collection('teachers')
+        .doc(_auth.currentUser!.uid)
+        .get();
+
+        String teachername = snapshot.get('teachername');
+HelperFunction.setUserNameSF( teachername);
+
 
         await _auth.signInWithEmailAndPassword(
             email: email, password: password);

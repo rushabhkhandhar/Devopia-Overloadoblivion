@@ -101,28 +101,26 @@ class _TeacherHomepageState extends State<TeacherHomepage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color.fromRGBO(99, 151, 255, 1),
-                Color.fromRGBO(31, 68, 255, 1)
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
+      title: Text(
+        'Hello, $name!',
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
         ),
-        title: Text(
-          'Homepage',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
       ),
+      actions: [
+        CircleAvatar(
+          backgroundImage: NetworkImage(
+            'https://www.example.com/avatar.png', // Provide the actual image URL here
+          ),
+          radius: 20,
+        ),
+        SizedBox(width: 16), // Add spacing between the avatar and the edge
+      ],
+      elevation: 0.0,
+      backgroundColor: Colors.transparent,
+    ),
+    
       drawer:Drawer(
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 50),
@@ -253,7 +251,7 @@ class _TeacherHomepageState extends State<TeacherHomepage> {
         },
         child: Icon(isCreateMode
             ? Icons.add
-            : Icons.document_scanner), // Change icon based on mode
+            : Icons.assignment), // Change icon based on mode
       ),
     );
   }
