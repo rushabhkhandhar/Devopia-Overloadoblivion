@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "907523584047",
+    "project_id": "devopia-overload-oblivion",
+    "storage_bucket": "devopia-overload-oblivion.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907523584047:android:11d69a001a0dba5e7956da",
+        "android_client_info": {
+          "package_name": "com.example.devopia_overload_oblivion"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxtfrJjyLTOJ5DYLEgzD2rE0dppFR5CmQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
