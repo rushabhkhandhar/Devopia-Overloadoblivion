@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:devopia_overload_oblivion/Helper/helper_function.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:devopia_overload_oblivion/models/student_model.dart';
 import 'package:devopia_overload_oblivion/models/teacher_model.dart';
@@ -18,6 +19,11 @@ class AuthMethods {
           password.isNotEmpty &&
           studentname.isNotEmpty &&
           year.isNotEmpty) {
+
+            HelperFunction.setUserLoggedInStatus(true);
+          HelperFunction.setUserNameSF( studentname);
+          HelperFunction.setUserEmailSF( email);
+
         UserCredential studentCredential = await _auth
             .createUserWithEmailAndPassword(email: email, password: password);
         print(studentCredential.user!.uid);
@@ -54,6 +60,10 @@ class AuthMethods {
       if (email.isNotEmpty && password.isNotEmpty) {
         await _auth.signInWithEmailAndPassword(
             email: email, password: password);
+
+           HelperFunction.setUserLoggedInStatus(true);
+          // HelperFunction.setUserNameSF( snapshot.docs[0]['fullName']);
+          HelperFunction.setUserEmailSF( email);
         res = "Success";
       } else {
         res = 'Please enter all the fields';
@@ -77,6 +87,11 @@ class AuthMethods {
           teachername.isNotEmpty &&
           course.isNotEmpty &&
           designation.isNotEmpty) {
+
+            HelperFunction.setUserLoggedInStatus(true);
+          HelperFunction.setUserNameSF( teachername);
+          HelperFunction.setUserEmailSF( email);
+
         UserCredential teacherCredential = await _auth
             .createUserWithEmailAndPassword(email: email, password: password);
         print(teacherCredential.user!.uid);
@@ -111,7 +126,13 @@ class AuthMethods {
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
     String res = "Some error occured";
     try {
+
       if (email.isNotEmpty && password.isNotEmpty) {
+
+        HelperFunction.setUserLoggedInStatus(true);
+          // HelperFunction.setUserNameSF( fullName);
+          HelperFunction.setUserEmailSF( email); 
+
         await _auth.signInWithEmailAndPassword(
             email: email, password: password);
         res = "Success";
@@ -145,4 +166,15 @@ class AuthMethods {
 
     return Student.fromSnap(snap);
   }
+  Future signout() async{
+try{
+await HelperFunction.setUserLoggedInStatus(false);
+await HelperFunction.setUserEmailSF("");
+await HelperFunction.setUserNameSF("");
+await _auth.signOut();
+
+} catch(e){
+  return null;
+}
+}
 }
