@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:devopia_overload_oblivion/resources/auth_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:devopia_overload_oblivion/global/global_var.dart';
 import 'package:devopia_overload_oblivion/providers/teacher_provider.dart';
@@ -13,7 +14,8 @@ import 'package:devopia_overload_oblivion/widgets/widgets.dart';
 import 'package:uuid/uuid.dart';
 
 class TeacherHomepage extends StatefulWidget {
-  const TeacherHomepage({super.key});
+   TeacherHomepage({super.key});
+  
 
   @override
   State<TeacherHomepage> createState() => _TeacherHomepageState();
@@ -22,6 +24,7 @@ class TeacherHomepage extends StatefulWidget {
 class _TeacherHomepageState extends State<TeacherHomepage> {
   Stream? quizStream;
   bool isCreateMode = true;
+  AuthMethods auth = AuthMethods();
 
   DatabaseService databaseService = new DatabaseService();
 
@@ -129,13 +132,12 @@ class _TeacherHomepageState extends State<TeacherHomepage> {
             ),
             ListTile(
               title: const Text('Sign Out'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UserTypeSelectionPage(),
-                  ),
-                );
+              onTap: () async {
+               await auth.signout();
+                Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => const UserTypeSelectionPage()),
+                                (route) => false);
               },
             ),
           ],

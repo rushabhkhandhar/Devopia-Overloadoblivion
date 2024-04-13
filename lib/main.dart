@@ -28,20 +28,23 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
     bool isSignedIn = false;
+    String userType ='';
 
     void initState() {
     super.initState();
-    getUserLoggedInStatus();
+    // getUserLoggedInStatus();
   }
-  void getUserLoggedInStatus() async {
-    HelperFunction.getUserLoggedInStatus().then((value) {
-      if (value != null) {
-        setState(() {
-          isSignedIn = value;
-        });
-      }
-    });
-  }
+  // void getUserLoggedInStatus() async {
+    
+  //   HelperFunction.getUserLoggedInStatus().then((value) {
+  //     if (value != null) {
+  //       setState(() {
+  //         isSignedIn = value;
+  //         userType= HelperFunction.userType;
+  //       });
+  //     }
+  //   });
+  // }
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -56,7 +59,8 @@ class _MyAppState extends State<MyApp> {
           fontFamily: 'Inter',
           primarySwatch: Colors.blue,
         ),
-        home:   SplashScreen(isSignedIn: isSignedIn ),
+        home:   SplashScreen(
+         ),
       ),
     );
   }

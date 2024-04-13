@@ -63,6 +63,7 @@ class AuthMethods {
         
       HelperFunction.setUserLoggedInStatus(true);
       HelperFunction.setUserEmailSF(email);
+      HelperFunction.setUserType("Student");
 
       DocumentSnapshot snapshot = await _firestore
         .collection('students')
@@ -99,6 +100,7 @@ HelperFunction.setUserNameSF( studentname);
             HelperFunction.setUserLoggedInStatus(true);
           HelperFunction.setUserNameSF( teachername);
           HelperFunction.setUserEmailSF( email);
+           HelperFunction.setUserType("teacher");
 
         UserCredential teacherCredential = await _auth
             .createUserWithEmailAndPassword(email: email, password: password);
@@ -140,6 +142,7 @@ HelperFunction.setUserNameSF( studentname);
         HelperFunction.setUserLoggedInStatus(true);
           // HelperFunction.setUserNameSF( fullName);
           HelperFunction.setUserEmailSF( email); 
+          HelperFunction.setUserType("teacher");
 
         await _auth.signInWithEmailAndPassword(
             email: email, password: password);
@@ -179,6 +182,7 @@ try{
 await HelperFunction.setUserLoggedInStatus(false);
 await HelperFunction.setUserEmailSF("");
 await HelperFunction.setUserNameSF("");
+await HelperFunction.setUserType("");
 await _auth.signOut();
 
 } catch(e){
