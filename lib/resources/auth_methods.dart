@@ -137,28 +137,26 @@ HelperFunction.setUserNameSF( studentname);
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
     String res = "Some error occured";
     try {
-
       if (email.isNotEmpty && password.isNotEmpty) {
+      await _auth.signInWithEmailAndPassword(
+        email: email, password: password);
+        
+      HelperFunction.setUserLoggedInStatus(true);
+      HelperFunction.setUserEmailSF(email);
+      HelperFunction.setUserType("Teacher");
 
-        HelperFunction.setUserLoggedInStatus(true);
-          // HelperFunction.setUserNameSF( fullName);
-          HelperFunction.setUserEmailSF( email); 
-          HelperFunction.setUserType("teacher");
-
-          DocumentSnapshot snapshot = await _firestore
+      DocumentSnapshot snapshot = await _firestore
         .collection('teachers')
         .doc(_auth.currentUser!.uid)
         .get();
 
-        String teachername = snapshot.get('teachername');
+      String teachername = snapshot.get('teachername');
+      // print(teachername);
+      // Do something with the studentname
 HelperFunction.setUserNameSF( teachername);
-
-
-        await _auth.signInWithEmailAndPassword(
-            email: email, password: password);
-        res = "Success";
+      res = "Success";
       } else {
-        res = 'Please enter all the fields';
+      res = 'Please enter all the fields';
       }
       return res;
     } catch (err) {
