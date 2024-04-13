@@ -307,6 +307,22 @@ def predict():
     changes=predict_changes(df,g3)
     return jsonify({"possible_changes": changes})
 
+@app.route('/give_graph', methods=['GET'])
+def give_graph():
+    columns=['age', 'Medu', 'Fedu', 'traveltime', 'studytime', 'failures', 'paid',
+       'activities', 'higher', 'internet', 'romantic', 'freetime', 'goout',
+       'absences', 'sex_F', 'sex_M', 'Mjob_at_home', 'Mjob_health',
+       'Mjob_other', 'Mjob_services', 'Mjob_teacher', 'Fjob_at_home',
+       'Fjob_health', 'Fjob_other', 'Fjob_services', 'Fjob_teacher']
+    importances=loaded_model.feature_importances_
+    feat_importances = {}
+    for i,features in zip(importances,columns):
+        print("{}: {}".format(features,i))
+        feat_importances[features] = i
+    feat_importances = dict(sorted(feat_importances.items(), key=lambda item: item[1]))
+    ranged_values=[i for i in range(len(feat_importances))]
+    return jsonify({"len_feat_importance":ranged_values,"feat_importance":list(feat_importances.values()),"columns":columns})
+
 if __name__ == '__main__':
     app.run(debug=True)
 
