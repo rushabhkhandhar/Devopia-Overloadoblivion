@@ -10,10 +10,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:devopia_overload_oblivion/resources/database.dart';
-// import 'package:devopia_overload_oblivion/screens/assignments.dart';
-
 import 'package:devopia_overload_oblivion/screens/quiz_play.dart';
-// import 'package:devopia_overload_oblivion/screens/short_answer_screen.dart';
 import 'package:devopia_overload_oblivion/screens/user_type_selec.dart';
 import 'package:provider/provider.dart';
 
@@ -86,18 +83,18 @@ class _StudentHomepageState extends State<StudentHomepage> {
     super.initState();
     getUserDetails();
   }
-
-  void getUserDetails() async {
-    await HelperFunction.getUserEmail().then((value) {
+  void getUserDetails() async{
+    await HelperFunction.getUserEmail().then((value){
       setState(() {
         email = value!;
       });
     });
-    await HelperFunction.getUserName().then((value) {
+    await HelperFunction.getUserName().then((value){
       setState(() {
         name = value!;
       });
     });
+    
   }
 
   @override
@@ -145,53 +142,55 @@ class _StudentHomepageState extends State<StudentHomepage> {
             ),
             const SizedBox(height: 30),
             const Divider(
-              height: 2,
+            height: 2,
+          ),
+          
+         
+          ListTile(
+            onTap: () async {
+              showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text("Logout"),
+                      content: const Text("Are you sure you want to logout?"),
+                      actions: [
+                        IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(
+                            Icons.cancel,
+                            color: Colors.red,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            await auth.signout();
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => const UserTypeSelectionPage()),
+                                (route) => false);
+                          },
+                          icon: const Icon(
+                            Icons.done,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ],
+                    );
+                  });
+            },
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            leading: const Icon(Icons.exit_to_app),
+            title: const Text(
+              "Logout",
+              style: TextStyle(color: Colors.black),
             ),
-            ListTile(
-              onTap: () async {
-                showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text("Logout"),
-                        content: const Text("Are you sure you want to logout?"),
-                        actions: [
-                          IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(
-                              Icons.cancel,
-                              color: Colors.red,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              await auth.signout();
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const UserTypeSelectionPage()),
-                                  (route) => false);
-                            },
-                            icon: const Icon(
-                              Icons.done,
-                              color: Colors.green,
-                            ),
-                          ),
-                        ],
-                      );
-                    });
-              },
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              leading: const Icon(Icons.exit_to_app),
-              title: const Text(
-                "Logout",
-                style: TextStyle(color: Colors.black),
-              ),
-            )
+          )
+
           ],
         ),
       ),
@@ -255,6 +254,7 @@ class _StudentHomepageState extends State<StudentHomepage> {
         padding: EdgeInsets.all(2.0),
         child: BottomAppBar(
           shape: CircularNotchedRectangle(),
+         
           child: Row(
             children: [
               // Other bottom nav items if any
