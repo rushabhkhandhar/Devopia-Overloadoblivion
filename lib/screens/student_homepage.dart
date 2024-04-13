@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devopia_overload_oblivion/Helper/helper_function.dart';
+import 'package:devopia_overload_oblivion/models/student_model.dart';
+import 'package:devopia_overload_oblivion/providers/student_provider.dart';
 import 'package:devopia_overload_oblivion/resources/auth_methods.dart';
 import 'package:devopia_overload_oblivion/screens/assignments.dart';
 import 'package:devopia_overload_oblivion/screens/short_answer_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:devopia_overload_oblivion/resources/database.dart';
@@ -11,6 +15,7 @@ import 'package:devopia_overload_oblivion/resources/database.dart';
 import 'package:devopia_overload_oblivion/screens/quiz_play.dart';
 // import 'package:devopia_overload_oblivion/screens/short_answer_screen.dart';
 import 'package:devopia_overload_oblivion/screens/user_type_selec.dart';
+import 'package:provider/provider.dart';
 
 class StudentHomepage extends StatefulWidget {
   const StudentHomepage({super.key});
@@ -23,6 +28,7 @@ class _StudentHomepageState extends State<StudentHomepage> {
   Stream? quizStream;
   bool isCreateMode = true;
   AuthMethods auth = AuthMethods();
+  FirebaseAuth firebaseauth = FirebaseAuth.instance;
 
   DatabaseService databaseService = new DatabaseService();
 
@@ -63,10 +69,16 @@ class _StudentHomepageState extends State<StudentHomepage> {
     );
   }
 
+  StudentProvider studentProvider = StudentProvider();
+
   String email = "";
   String name = "";
   @override
   void initState() {
+    setState(() {
+      studentProvider.refreshStudent();
+    });
+
     databaseService.getQuizData().then((value) {
       quizStream = value;
       setState(() {});
@@ -90,8 +102,9 @@ class _StudentHomepageState extends State<StudentHomepage> {
 
   @override
   Widget build(BuildContext context) {
+    Student student = studentProvider.getUser();
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromARGB(255, 255, 215, 252),
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -182,7 +195,60 @@ class _StudentHomepageState extends State<StudentHomepage> {
           ],
         ),
       ),
-      body: quizList(),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+                width: double.maxFinite,
+                height: 200,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      const Icon(
+                        Icons.account_circle,
+                        size: 150,
+                        color: Colors.grey,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            student.studentname,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 20),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(student.email),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(student.year),
+                        ],
+                      )
+                    ],
+                  ),
+                )),
+          ],
+        ),
+      ),
+      //quizList(),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
         height: 80,
