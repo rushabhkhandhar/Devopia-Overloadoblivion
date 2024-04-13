@@ -20,7 +20,7 @@ class _CreateQuizState extends State<CreateQuiz> {
   bool isLoading = false;
   String? quizId;
 
-  createQuiz(String course, String year, String division) {
+  createQuiz(String year) {
     quizId = Uuid().v1();
     if (_formKey.currentState!.validate()) {
       setState(() {
@@ -35,7 +35,11 @@ class _CreateQuizState extends State<CreateQuiz> {
       };
 
       databaseService
-          .addQuizData(quizData, quizId!, year,)
+          .addQuizData(
+        quizData,
+        quizId!,
+        year,
+      )
           .then((value) {
         setState(() {
           isLoading = false;
@@ -46,13 +50,12 @@ class _CreateQuizState extends State<CreateQuiz> {
     }
   }
 
+  String selectedValue = 'Kindergarten';
   @override
   Widget build(BuildContext context) {
     // Teacher _teacher =
     //     Provider.of<TeacherProvider>(context).getUser();
-    String selectedValue = 'FE';
-    String selectedDivision = 'C1';
-    String selectedCourse = "Economics";
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -78,8 +81,8 @@ class _CreateQuizState extends State<CreateQuiz> {
               TextFormField(
                 validator: (val) =>
                     val!.isEmpty ? "Enter Quiz Image Url" : null,
-                decoration: InputDecoration(
-                    hintText: "Quiz Image Url (Optional)"),
+                decoration:
+                    InputDecoration(hintText: "Quiz Image Url (Optional)"),
                 onChanged: (val) {
                   quizImgUrl = val;
                 },
@@ -88,8 +91,7 @@ class _CreateQuizState extends State<CreateQuiz> {
                 height: 16, // Add vertical spacing
               ),
               TextFormField(
-                validator: (val) =>
-                    val!.isEmpty ? "Enter Quiz Title" : null,
+                validator: (val) => val!.isEmpty ? "Enter Quiz Title" : null,
                 decoration: const InputDecoration(hintText: "Quiz Title"),
                 onChanged: (val) {
                   quizTitle = val;
@@ -101,8 +103,7 @@ class _CreateQuizState extends State<CreateQuiz> {
               TextFormField(
                 validator: (val) =>
                     val!.isEmpty ? "Enter Quiz Description" : null,
-                decoration:
-                    const InputDecoration(hintText: "Quiz Description"),
+                decoration: const InputDecoration(hintText: "Quiz Description"),
                 onChanged: (val) {
                   quizDesc = val;
                 },
@@ -119,20 +120,56 @@ class _CreateQuizState extends State<CreateQuiz> {
                   value: selectedValue,
                   items: const <DropdownMenuItem<String>>[
                     DropdownMenuItem(
-                      value: 'FE',
-                      child: Text("FE"),
+                      value: 'Kindergarten',
+                      child: Text("Kindergarten"),
                     ),
                     DropdownMenuItem(
-                      value: "SE",
-                      child: Text("SE"),
+                      value: "Grade 1",
+                      child: Text("Grade 1"),
                     ),
                     DropdownMenuItem(
-                      value: "TE",
-                      child: Text("TE"),
+                      value: "Grade 2",
+                      child: Text("Grade 2"),
                     ),
                     DropdownMenuItem(
-                      value: "BE",
-                      child: Text("BE"),
+                      value: "Grade 3",
+                      child: Text("Grade 3"),
+                    ),
+                    DropdownMenuItem(
+                      value: "Grade 4",
+                      child: Text("Grade 4"),
+                    ),
+                    DropdownMenuItem(
+                      value: "Grade 5",
+                      child: Text("Grade 5"),
+                    ),
+                    DropdownMenuItem(
+                      value: "Grade 6",
+                      child: Text("Grade 6"),
+                    ),
+                    DropdownMenuItem(
+                      value: "Grade 7",
+                      child: Text("Grade 7"),
+                    ),
+                    DropdownMenuItem(
+                      value: "Grade 8",
+                      child: Text("Grade 8"),
+                    ),
+                    DropdownMenuItem(
+                      value: "Grade 9",
+                      child: Text("Grade 9"),
+                    ),
+                    DropdownMenuItem(
+                      value: "Grade 10",
+                      child: Text("Grade 10"),
+                    ),
+                    DropdownMenuItem(
+                      value: "Grade 11",
+                      child: Text("Grade 11"),
+                    ),
+                    DropdownMenuItem(
+                      value: "Grade 12",
+                      child: Text("Grade 12"),
                     ),
                   ],
                   onChanged: (String? newValue) {
@@ -146,90 +183,17 @@ class _CreateQuizState extends State<CreateQuiz> {
               SizedBox(
                 height: 16, // Add vertical spacing
               ),
-              const Text('Select a Division'),
-              Container(
-                height: 70,
-                width: 80,
-                child: DropdownButton<String>(
-                  elevation: 6,
-                  value: selectedDivision,
-                  items: const <DropdownMenuItem<String>>[
-                    DropdownMenuItem(
-                      value: "C1",
-                      child: Text("C1"),
-                    ),
-                    DropdownMenuItem(
-                      value: "C2",
-                      child: Text("C2"),
-                    ),
-                    DropdownMenuItem(
-                      value: "DS1",
-                      child: Text("DS1"),
-                    ),
-                    DropdownMenuItem(
-                      value: "Mech1",
-                      child: Text("Mech1"),
-                    ),
-                    DropdownMenuItem(
-                      value: "Mech2",
-                      child: Text("Mech2"),
-                    ),
-                  ],
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedDivision = newValue!;
-                      // Perform actions based on the selected value
-                    });
-                  },
-                ),
-              ),
-              Text("Select Course"),
-              Container(
-                height: 70,
-                child: DropdownButton<String>(
-                  elevation: 6,
-                  value: selectedCourse,
-                  items: const <DropdownMenuItem<String>>[
-                    DropdownMenuItem(
-                      value: "Economics",
-                      child: Text("Economics"),
-                    ),
-                    DropdownMenuItem(
-                      value: "History",
-                      child: Text("History"),
-                    ),
-                    DropdownMenuItem(
-                      value: "Computer Science",
-                      child: Text("Computer Science"),
-                    ),
-                    DropdownMenuItem(
-                      value: "Political Science",
-                      child: Text("Political Science"),
-                    ),
-                    DropdownMenuItem(
-                      value: "Literature",
-                      child: Text("Literature"),
-                    ),
-                  ],
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedCourse = newValue!;
-                      // Perform actions based on the selected value
-                    });
-                  },
-                ),
-              ),
               Spacer(),
               GestureDetector(
                 onTap: () {
                   createQuiz(
-                      selectedCourse, selectedValue, selectedDivision);
+                    selectedValue,
+                  );
                 },
                 child: Container(
                   alignment: Alignment.center,
                   width: MediaQuery.of(context).size.width,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
                   decoration: BoxDecoration(
                       color: Colors.blue,
                       borderRadius: BorderRadius.circular(30)),

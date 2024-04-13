@@ -1,4 +1,5 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:devopia_overload_oblivion/screens/teacher_homepage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:devopia_overload_oblivion/screens/user_type_selec.dart';
@@ -6,8 +7,9 @@ import 'package:lottie/lottie.dart';
 
 class SplashScreen extends StatelessWidget {
   bool isSignedIn;
-   SplashScreen({super.key,
-    required this.isSignedIn ,
+  SplashScreen({
+    super.key,
+    required this.isSignedIn,
   });
 
   @override
@@ -21,7 +23,9 @@ class SplashScreen extends StatelessWidget {
             )
           ],
         ),
-        nextScreen: isSignedIn ?const  Scaffold() : const UserTypeSelectionPage(),
+        nextScreen: isSignedIn
+            ? const TeacherHomepage()
+            : const UserTypeSelectionPage(),
         splashIconSize: 300,
         backgroundColor: Color.fromRGBO(99, 151, 255, 1),
       ),
