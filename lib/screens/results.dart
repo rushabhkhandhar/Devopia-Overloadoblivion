@@ -1,10 +1,12 @@
+import 'package:devopia_overload_oblivion/screens/quiz_play.dart';
 import 'package:flutter/material.dart';
 import 'package:devopia_overload_oblivion/screens/chat_help1.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class Results extends StatefulWidget {
   final int total, correct, incorrect, notattempted;
-  Results({required this.incorrect,required this.total,required this.correct,required this.notattempted});
+  final List<Map<String,dynamic>> questions;
+  Results({required this.incorrect,required this.total,required this.correct,required this.notattempted,required this.questions});
 
   @override
   _ResultsState createState() => _ResultsState();
@@ -59,7 +61,7 @@ class _ResultsState extends State<Results> {
               SizedBox(height: 16,),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChatLoadScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChatLoadScreen(questions: questions,)));
                 },
                 child: Text('Need for improvements?'),
               ),

@@ -22,7 +22,7 @@ class _CreateAIQuizState extends State<CreateAIQuiz> {
 
   bool isLoading = false;
   String? quizId;
-  String selectedValue = 'Kindergarten';
+  String selectedValue = 'FE';
   createQuiz(String year) {
     quizId = Uuid().v1();
     if (_formKey.currentState!.validate()) {
@@ -38,7 +38,11 @@ class _CreateAIQuizState extends State<CreateAIQuiz> {
       };
 
       databaseService
-          .addQuizData(quizData, quizId!, year, )
+          .addQuizData(
+        quizData,
+        quizId!,
+        year,
+      )
           .then((value) {
         setState(() {
           isLoading = false;
@@ -160,12 +164,10 @@ class _CreateAIQuizState extends State<CreateAIQuiz> {
             SizedBox(
               height: 16, // Add vertical spacing
             ),
-            
-           
             Spacer(),
             BlueButton(
               onTap: () {
-                createQuiz( selectedValue);
+                createQuiz(selectedValue);
               },
               text: "Generate Quiz",
             ),

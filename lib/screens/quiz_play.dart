@@ -14,6 +14,7 @@ class QuizPlay extends StatefulWidget {
   _QuizPlayState createState() => _QuizPlayState();
 }
 
+List<Map<String, dynamic>> questions = [];
 int _correct = 0;
 int _incorrect = 0;
 int _notAttempted = 0;
@@ -41,17 +42,15 @@ class _QuizPlayState extends State<QuizPlay> {
       print("init don $total ${widget.quizId} ");
     });
 
-    if(infoStream == null){
-      infoStream = Stream<List<int>>.periodic(
-        Duration(milliseconds: 100), (x){
-          print("this is x $x");
-          return [_correct, _incorrect] ;
+    if (infoStream == null) {
+      infoStream = Stream<List<int>>.periodic(Duration(milliseconds: 100), (x) {
+        // print("this is x $x");
+        return [_correct, _incorrect];
       });
     }
 
     super.initState();
   }
-
 
   QuestionModel getQuestionModelFromDatasnapshot(
       DocumentSnapshot questionSnapshot) {
@@ -64,16 +63,16 @@ class _QuizPlayState extends State<QuizPlay> {
       correctOption: "",
       answered: false,
     );
-  
 
-    questionModel.question = (questionSnapshot.data()! as Map<String,dynamic>)["question"];
+    questionModel.question =
+        (questionSnapshot.data()! as Map<String, dynamic>)["question"];
 
     /// shuffling the options
     List<String> options = [
-      (questionSnapshot.data() as Map<String,dynamic>)["option1"],
-      (questionSnapshot.data() as Map<String,dynamic>)["option2"],
-      (questionSnapshot.data() as Map<String,dynamic>)["option3"],
-      (questionSnapshot.data() as Map<String,dynamic>)["option4"]
+      (questionSnapshot.data() as Map<String, dynamic>)["option1"],
+      (questionSnapshot.data() as Map<String, dynamic>)["option2"],
+      (questionSnapshot.data() as Map<String, dynamic>)["option3"],
+      (questionSnapshot.data() as Map<String, dynamic>)["option4"]
     ];
     options.shuffle();
 
@@ -81,7 +80,8 @@ class _QuizPlayState extends State<QuizPlay> {
     questionModel.option2 = options[1];
     questionModel.option3 = options[2];
     questionModel.option4 = options[3];
-    questionModel.correctOption = (questionSnapshot.data()! as Map<String,dynamic> )["option1"];
+    questionModel.correctOption =
+        (questionSnapshot.data()! as Map<String, dynamic>)["option1"];
     questionModel.answered = false;
 
     print(questionModel.correctOption.toLowerCase());
@@ -102,15 +102,14 @@ class _QuizPlayState extends State<QuizPlay> {
         title: AppLogo(),
         centerTitle: true,
         backgroundColor: Colors.transparent,
-        
         elevation: 0.0,
       ),
       body: isLoading
           ? Container(
-        child: Center(child: CircularProgressIndicator()),
-      )
+              child: Center(child: CircularProgressIndicator()),
+            )
           : SingleChildScrollView(
-            child: Container(
+              child: Container(
                 child: Column(
                   children: [
                     InfoHeader(
@@ -121,8 +120,10 @@ class _QuizPlayState extends State<QuizPlay> {
                     ),
                     questionSnaphot!.docs == null
                         ? Container(
-                      child: Center(child: Text("No Data"),),
-                    )
+                            child: Center(
+                              child: Text("No Data"),
+                            ),
+                          )
                         : ListView.builder(
                             itemCount: questionSnaphot!.docs.length,
                             shrinkWrap: true,
@@ -137,13 +138,22 @@ class _QuizPlayState extends State<QuizPlay> {
                   ],
                 ),
               ),
-              
-          ),
-          floatingActionButton: FloatingActionButton(
-            child:Icon(Icons.check),
-            onPressed: (){
+            ),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.check),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Results(
+                    incorrect: _incorrect,
+                    total: total,
+                    correct: _correct,
+                    notattempted: 0,
+                    questions: questions),
+              ),
+            );
             
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Results(incorrect: _incorrect, total: total, correct: _correct, notattempted: 0 )));
           }),
     );
   }
@@ -162,39 +172,39 @@ class _InfoHeaderState extends State<InfoHeader> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: infoStream,
-      builder: (context, snapshot){
-        return snapshot.hasData ? Container(
-          height: 40,
-          margin: EdgeInsets.only(left: 14),
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            children: <Widget>[
-              NoOfQuestionTile(
-                text: "Total",
-                number: widget.length,
-              ),
-              NoOfQuestionTile(
-                text: "Correct",
-                number: _correct,
-              ),
-              NoOfQuestionTile(
-                text: "Incorrect",
-                number: _incorrect,
-              ),
-              NoOfQuestionTile(
-                text: "NotAttempted",
-                number: _notAttempted,
-              ),
-            ],
-          ),
-        ) : Container();
-      }
-    );
+        stream: infoStream,
+        builder: (context, snapshot) {
+          return snapshot.hasData
+              ? Container(
+                  height: 40,
+                  margin: EdgeInsets.only(left: 14),
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    children: <Widget>[
+                      NoOfQuestionTile(
+                        text: "Total",
+                        number: widget.length,
+                      ),
+                      NoOfQuestionTile(
+                        text: "Correct",
+                        number: _correct,
+                      ),
+                      NoOfQuestionTile(
+                        text: "Incorrect",
+                        number: _incorrect,
+                      ),
+                      NoOfQuestionTile(
+                        text: "NotAttempted",
+                        number: _notAttempted,
+                      ),
+                    ],
+                  ),
+                )
+              : Container();
+        });
   }
 }
-
 
 class QuizPlayTile extends StatefulWidget {
   final QuestionModel questionModel;
@@ -216,9 +226,7 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: EdgeInsets.symmetric(
-              horizontal: 20
-            ),
+            margin: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
               "Q${widget.index + 1} ${widget.questionModel.question}",
               style:
@@ -239,6 +247,7 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
                     widget.questionModel.answered = true;
                     _correct = _correct + 1;
                     _notAttempted = _notAttempted + 1;
+                    widget.questionModel.isCorrect = true;
                   });
                 } else {
                   setState(() {
@@ -248,6 +257,10 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
                     _notAttempted = _notAttempted - 1;
                   });
                 }
+                setState(() {
+                  questions.add(widget.questionModel.toJson());
+                  print(questions.toString());
+                });
               }
             },
             child: OptionTile(
@@ -271,6 +284,7 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
                     widget.questionModel.answered = true;
                     _correct = _correct + 1;
                     _notAttempted = _notAttempted + 1;
+                    widget.questionModel.isCorrect = true;
                   });
                 } else {
                   setState(() {
@@ -280,6 +294,10 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
                     _notAttempted = _notAttempted - 1;
                   });
                 }
+                setState(() {
+                  questions.add(widget.questionModel.toJson());
+                  print(questions.toString());
+                });
               }
             },
             child: OptionTile(
@@ -303,6 +321,7 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
                     widget.questionModel.answered = true;
                     _correct = _correct + 1;
                     _notAttempted = _notAttempted + 1;
+                    widget.questionModel.isCorrect = true;
                   });
                 } else {
                   setState(() {
@@ -312,6 +331,10 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
                     _notAttempted = _notAttempted - 1;
                   });
                 }
+                setState(() {
+                  questions.add(widget.questionModel.toJson());
+                  print(questions);
+                });
               }
             },
             child: OptionTile(
@@ -335,6 +358,7 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
                     widget.questionModel.answered = true;
                     _correct = _correct + 1;
                     _notAttempted = _notAttempted + 1;
+                    widget.questionModel.isCorrect = true;
                   });
                 } else {
                   setState(() {
@@ -344,6 +368,10 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
                     _notAttempted = _notAttempted - 1;
                   });
                 }
+                setState(() {
+                  questions.add(widget.questionModel.toJson());
+                  print(questions.toString());
+                });
               }
             },
             child: OptionTile(

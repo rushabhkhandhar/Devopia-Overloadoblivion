@@ -69,8 +69,8 @@ class _AIQuizInputPageState extends State<AIQuizInputPage> {
               children: [
                 BlueButton(
                     onTap: () async {
-                      final response = await http.get(Uri.parse(
-                          '${GlobalVariables.Url}/categories'));
+                      final response = await http
+                          .get(Uri.parse('${GlobalVariables.Url}/categories'));
                       if (response.statusCode == 200) {
                         final decodedResponse = json.decode(response.body);
                         setState(() {
@@ -131,11 +131,11 @@ class _AIQuizInputPageState extends State<AIQuizInputPage> {
                 ),
                 const SizedBox(height: 16.0),
                 DropdownButtonFormField<String>(
-                  decoration:const InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Difficulty',
                     border: OutlineInputBorder(),
                   ),
-                  items: const[
+                  items: const [
                     DropdownMenuItem(
                       value: 'easy',
                       child: Text('Easy'),
@@ -155,7 +155,7 @@ class _AIQuizInputPageState extends State<AIQuizInputPage> {
                     });
                   },
                 ),
-               const SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Topic ID',
@@ -171,30 +171,27 @@ class _AIQuizInputPageState extends State<AIQuizInputPage> {
                 BlueButton(
                     onTap: () async {
                       final response = await http.post(
-                        Uri.parse(
-                            '${GlobalVariables.Url}/quiz'),
-                        body: json.encode(<String, dynamic>{
-                          'difficulty': selectedDifficulty,
-                          'topic_id': enteredTopicID,
-                        }),
+                        Uri.parse('${GlobalVariables.Url}/get_questions'),
+                        body: json
+                            .encode(<String, dynamic>{'grade': "10th Grade"}),
                         headers: <String, String>{
                           'Content-Type': 'application/json'
                         },
                       );
                       if (response.statusCode == 200) {
                         print(jsonDecode(response.body));
-                        for (int i = 0; i < 5; i++) {
-                          uploadQuizData(
-                            jsonDecode(response.body)[i]['question'],
-                            jsonDecode(response.body)[i]['correct_answer'],
-                            jsonDecode(response.body)[i]["incorrect_answers"]
-                                [0],
-                            jsonDecode(response.body)[i]["incorrect_answers"]
-                                [1],
-                            jsonDecode(response.body)[i]["incorrect_answers"]
-                                [2],
-                          );
-                        }
+                        // for (int i = 0; i < 5; i++) {
+                        //   uploadQuizData(
+                        //     jsonDecode(response.body)[i]['question'],
+                        //     jsonDecode(response.body)[i]['correct_answer'],
+                        //     jsonDecode(response.body)[i]["incorrect_answers"]
+                        //         [0],
+                        //     jsonDecode(response.body)[i]["incorrect_answers"]
+                        //         [1],
+                        //     jsonDecode(response.body)[i]["incorrect_answers"]
+                        //         [2],
+                        //   );
+                        // }
                         // Navigator.push(
                         //   context,
                         //   MaterialPageRoute(builder: (context) => AIQuizPlay()),
