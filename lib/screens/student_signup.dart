@@ -26,8 +26,7 @@ class _StudentSignupState extends State<StudentSignup> {
         password: _passwordController.text,
         studentname: _nameController.text,
         year: selectedValue,
-        course: selectedCourse,
-        division: selectedDivision);
+        );
     setState(() {
       isLoading = false;
     });
@@ -51,9 +50,8 @@ class _StudentSignupState extends State<StudentSignup> {
     super.dispose();
   }
 
-  String selectedValue = "FE";
-  String selectedDivision = "C1";
-  String selectedCourse = "Economics";
+  String selectedValue = "Kindergarten";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -208,42 +206,6 @@ class _StudentSignupState extends State<StudentSignup> {
                   height: 16,
                 ),
                
-                Text("Select Course"),
-                Container(
-                  height: 70,
-                  child: DropdownButton<String>(
-                    elevation: 6,
-                    value: selectedCourse,
-                    items: const <DropdownMenuItem<String>>[
-                      DropdownMenuItem(
-                        value: "Economics",
-                        child: Text("Economics"),
-                      ),
-                      DropdownMenuItem(
-                        value: "History",
-                        child: Text("History"),
-                      ),
-                      DropdownMenuItem(
-                        value: "Computer Science",
-                        child: Text("Computer Science"),
-                      ),  
-                      DropdownMenuItem(
-                        value: "Political Science",
-                        child: Text("Political Science"),
-                      ),
-                      DropdownMenuItem(
-                        value: "Literature",
-                        child: Text("Literature"),
-                      ),
-                    ],
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedCourse = newValue!;
-                        // Perform actions based on the selected value
-                      });
-                    },
-                  ),
-                ),
                 const SizedBox(height: 45.0),
                 ElevatedButton(
                   onPressed: () async {
