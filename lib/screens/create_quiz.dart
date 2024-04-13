@@ -212,5 +212,4 @@ class _CreateQuizState extends State<CreateQuiz> {
       ),
     );
   }
-  
 }
