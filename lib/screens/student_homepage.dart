@@ -68,12 +68,16 @@ class _StudentHomepageState extends State<StudentHomepage> {
 
   StudentProvider studentProvider = StudentProvider();
 
+  refreshUser() async {
+    await studentProvider.refreshStudent();
+  }
+
   String email = "";
   String name = "";
   @override
   void initState() {
-    setState(() {
-      studentProvider.refreshStudent();
+    refreshUser().then((value) {
+      setState(() {});
     });
 
     databaseService.getQuizData().then((value) {
@@ -83,18 +87,18 @@ class _StudentHomepageState extends State<StudentHomepage> {
     super.initState();
     getUserDetails();
   }
-  void getUserDetails() async{
-    await HelperFunction.getUserEmail().then((value){
+
+  void getUserDetails() async {
+    await HelperFunction.getUserEmail().then((value) {
       setState(() {
         email = value!;
       });
     });
-    await HelperFunction.getUserName().then((value){
+    await HelperFunction.getUserName().then((value) {
       setState(() {
         name = value!;
       });
     });
-    
   }
 
   @override
@@ -103,25 +107,22 @@ class _StudentHomepageState extends State<StudentHomepage> {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 215, 252),
       appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color.fromRGBO(99, 151, 255, 1),
-                Color.fromRGBO(31, 68, 255, 1)
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
         title: Text(
-          'Student Homepage',
+          'Hello, $name!',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          CircleAvatar(
+            backgroundImage: NetworkImage(
+              'https://www.example.com/avatar.png', // Provide the actual image URL here
+            ),
+            radius: 20,
+          ),
+          SizedBox(width: 16), // Add spacing between the avatar and the edge
+        ],
         elevation: 0.0,
         backgroundColor: Colors.transparent,
       ),
@@ -142,63 +143,63 @@ class _StudentHomepageState extends State<StudentHomepage> {
             ),
             const SizedBox(height: 30),
             const Divider(
-            height: 2,
-          ),
-          
-         
-          ListTile(
-            onTap: () async {
-              showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text("Logout"),
-                      content: const Text("Are you sure you want to logout?"),
-                      actions: [
-                        IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(
-                            Icons.cancel,
-                            color: Colors.red,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            await auth.signout();
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) => const UserTypeSelectionPage()),
-                                (route) => false);
-                          },
-                          icon: const Icon(
-                            Icons.done,
-                            color: Colors.green,
-                          ),
-                        ),
-                      ],
-                    );
-                  });
-            },
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            leading: const Icon(Icons.exit_to_app),
-            title: const Text(
-              "Logout",
-              style: TextStyle(color: Colors.black),
+              height: 2,
             ),
-          )
-
+            ListTile(
+              onTap: () async {
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("Logout"),
+                        content: const Text("Are you sure you want to logout?"),
+                        actions: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(
+                              Icons.cancel,
+                              color: Colors.red,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () async {
+                              await auth.signout();
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const UserTypeSelectionPage()),
+                                  (route) => false);
+                            },
+                            icon: const Icon(
+                              Icons.done,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ],
+                      );
+                    });
+              },
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              leading: const Icon(Icons.exit_to_app),
+              title: const Text(
+                "Logout",
+                style: TextStyle(color: Colors.black),
+              ),
+            )
           ],
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            Container(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -211,12 +212,12 @@ class _StudentHomepageState extends State<StudentHomepage> {
                     ),
                   ],
                 ),
-                width: double.maxFinite,
+                width: MediaQuery.of(context).size.width - 10,
                 height: 200,
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       const Icon(
                         Icons.account_circle,
@@ -224,6 +225,7 @@ class _StudentHomepageState extends State<StudentHomepage> {
                         color: Colors.grey,
                       ),
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
@@ -232,19 +234,89 @@ class _StudentHomepageState extends State<StudentHomepage> {
                                 fontWeight: FontWeight.w600, fontSize: 20),
                           ),
                           SizedBox(
-                            height: 20,
+                            height: 10,
                           ),
-                          Text(student.email),
+                          Text(
+                            student.year,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 18),
+                          ),
                           SizedBox(
                             height: 10,
                           ),
-                          Text(student.year),
+                          Text(student.email),
                         ],
                       )
                     ],
                   ),
-                )),
-          ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Student Report",
+                style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+                width: MediaQuery.of(context).size.width - 10,
+                height: 200,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+                width: MediaQuery.of(context).size.width - 10,
+                height: 200,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+                width: MediaQuery.of(context).size.width - 10,
+                height: 200,
+              )
+            ],
+          ),
         ),
       ),
       //quizList(),
@@ -254,7 +326,6 @@ class _StudentHomepageState extends State<StudentHomepage> {
         padding: EdgeInsets.all(2.0),
         child: BottomAppBar(
           shape: CircularNotchedRectangle(),
-         
           child: Row(
             children: [
               // Other bottom nav items if any
