@@ -282,8 +282,11 @@ class _StudentSignupState extends State<StudentSignup> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => const StudentLogin()));
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const StudentLogin(),
+                          ),
+                        );
                       },
                       child: const Text(
                         'Login',
