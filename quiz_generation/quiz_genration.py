@@ -13,8 +13,8 @@ def get_questions(difficulty_level):
 
     url = "https://opentdb.com/api.php"
     params = {
-        "amount": 8, 
-        "category": [9],  
+        "amount": 8,    
+        "category": 17,  
         "difficulty": difficulty_level
     }
 
@@ -38,7 +38,7 @@ def display_question(question_data):
     print(question_data["question"])
     for i, option in enumerate(question_data["incorrect_answers"]):
         print(f"{i+1}. {option}")
-    print(f"{len(question_data['incorrect_answers']) + 1}. {question_data['correct_answer']}")  # Display correct answer last
+    print(f"{len(question_data['incorrect_answers']) + 1}. {question_data['correct_answer']}")
 
     # Add the index of the correct answer to the question_data dictionary
     question_data["correct_answer_index"] = len(question_data['incorrect_answers'])
@@ -49,23 +49,13 @@ def main():
     """
 
     standard_to_difficulty = {
-        "Kindergarten": "easy",
-        "1st Grade": "easy",
-        "2nd Grade": "easy",
-        "3rd Grade": "easy",
-        "4th Grade": "easy",
-        "5th Grade": "medium",
-        "6th Grade": "medium",
-        "7th Grade": "medium",
-        "8th Grade": "medium",
-        "9th Grade": "medium",
         "10th Grade": "hard",
         "11th Grade": "hard",
         "12th Grade": "hard"
     }
 
     print("Welcome to the Quiz App!")
-    standard = input("Enter your grade level (e.g., Kindergarten, 1st Grade, etc.): ")
+    standard = input("Enter your grade level (e.g., 10th Grade, 11th Grade, 12th Grade): ")
 
     if standard not in standard_to_difficulty:
         print("Invalid grade level. Please try again.")
@@ -91,6 +81,7 @@ def main():
             print("Invalid input. Please enter a number.")
 
     print("Your final score:", score, "/", len(questions))
+
 
 if __name__ == "__main__":
     main()
