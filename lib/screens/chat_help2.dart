@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:devopia_overload_oblivion/screens/student_homepage.dart';
 import 'secrets.dart';
 
-
 class chatHelp2 extends StatefulWidget {
   const chatHelp2({super.key});
 
@@ -14,28 +13,40 @@ class chatHelp2 extends StatefulWidget {
 }
 
 class _chatHelp2State extends State<chatHelp2> {
-  ChatUser myself = ChatUser(id: '1',firstName: 'Shlok');
-  ChatUser bot = ChatUser(id: '2',firstName: 'Chanakya');
+  ChatUser myself = ChatUser(id: '1', firstName: 'Shlok');
+  ChatUser bot = ChatUser(id: '2', firstName: 'Chanakya');
 
-  List <ChatMessage> allMessages=[];
-  List <ChatUser> typing=[];
-  final ourUrl='https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=$openAPIKey';
-  final header = {
-    "Content-Type":"application/json"
-  };
+  List<ChatMessage> allMessages = [];
+  List<ChatUser> typing = [];
+  final ourUrl =
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=$openAPIKey';
+  final header = {"Content-Type": "application/json"};
 
   getdata(ChatMessage m) async {
     typing.add(bot);
     allMessages.insert(0, m);
 
     setState(() {});
-    var data = {"contents":[{"parts":[{"text":m.text}]}]};
-    await http.post(Uri.parse(ourUrl),headers: header,body: jsonEncode(data)).then((value) {
-      if(value.statusCode==200){
-        var result=jsonDecode(value.body);
+    var data = {
+      "contents": [
+        {
+          "parts": [
+            {"text": m.text}
+          ]
+        }
+      ]
+    };
+    await http
+        .post(Uri.parse(ourUrl), headers: header, body: jsonEncode(data))
+        .then((value) {
+      if (value.statusCode == 200) {
+        var result = jsonDecode(value.body);
         print(result['candidates'][0]['content']['parts'][0]['text']);
 
-        ChatMessage m1=ChatMessage(text: result['candidates'][0]['content']['parts'][0]['text'],user: bot, createdAt: DateTime.now());
+        ChatMessage m1 = ChatMessage(
+            text: result['candidates'][0]['content']['parts'][0]['text'],
+            user: bot,
+            createdAt: DateTime.now());
         allMessages.insert(0, m1);
         setState(() {});
       } else {
@@ -56,18 +67,17 @@ class _chatHelp2State extends State<chatHelp2> {
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const StudentHomepage() ),
+              MaterialPageRoute(builder: (context) => const StudentHomepage()),
             );
           },
         ),
       ),
       body: Stack(
         children: [
-          
           DashChat(
             typingUsers: typing,
-            currentUser: myself, 
-            onSend: (ChatMessage m){
+            currentUser: myself,
+            onSend: (ChatMessage m) {
               getdata(m);
             },
             messages: allMessages,

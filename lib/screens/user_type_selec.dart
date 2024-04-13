@@ -17,20 +17,18 @@ class UserTypeSelectionPage extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
-     
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-        
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SizedBox(height: MediaQuery.of(context).size.height / 10),
-              const CircleAvatar(
-                radius: 150,
-                backgroundImage: AssetImage('assets/images/sc9.png'),
-                backgroundColor: Color.fromRGBO(255, 229, 180, 22),
-                // foregroundImage: AssetImage('assets/images/sc9.png'),
-              ),
+            const CircleAvatar(
+              radius: 150,
+              backgroundImage: AssetImage('assets/images/sc9.png'),
+              backgroundColor: Color.fromRGBO(255, 229, 180, 22),
+              // foregroundImage: AssetImage('assets/images/sc9.png'),
+            ),
             Container(
               decoration: const BoxDecoration(
                 gradient: GlobalVariables.primaryGradient,
@@ -45,7 +43,6 @@ class UserTypeSelectionPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                
                   SizedBox(
                     height: 50,
                     width: 300,
