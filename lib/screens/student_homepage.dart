@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:devopia_overload_oblivion/Helper/helper_function.dart';
 import 'package:devopia_overload_oblivion/resources/auth_methods.dart';
+import 'package:devopia_overload_oblivion/screens/teacher_homepage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:devopia_overload_oblivion/resources/database.dart';
@@ -61,7 +63,8 @@ class _StudentHomepageState extends State<StudentHomepage> {
       ),
     );
   }
-
+ String email = "";
+  String name = "";
   @override
   void initState() {
     databaseService.getQuizData().then((value) {
@@ -69,6 +72,20 @@ class _StudentHomepageState extends State<StudentHomepage> {
       setState(() {});
     });
     super.initState();
+    getUserDetails();
+  }
+  void getUserDetails() async{
+    await HelperFunction.getUserEmail().then((value){
+      setState(() {
+        email = value!;
+      });
+    });
+    await HelperFunction.getUserName().then((value){
+      setState(() {
+        name = value!;
+      });
+    });
+    
   }
 
   @override
@@ -99,6 +116,7 @@ class _StudentHomepageState extends State<StudentHomepage> {
         backgroundColor: Colors.transparent,
       ),
       drawer: Drawer(
+      
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
@@ -126,6 +144,47 @@ class _StudentHomepageState extends State<StudentHomepage> {
               title: const Text('Sign Out'),
               onTap: () async{
                  await auth.signout();
+          padding: const EdgeInsets.symmetric(vertical: 50),
+          children: <Widget>[
+            const Icon(
+              Icons.account_circle,
+              size: 150,
+              color: Colors.grey,
+            ),
+            const SizedBox(height: 15),
+            Text(
+              name,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 30),
+            const Divider(
+            height: 2,
+          ),
+          
+         
+          ListTile(
+            onTap: () async {
+              showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text("Logout"),
+                      content: const Text("Are you sure you want to logout?"),
+                      actions: [
+                        IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(
+                            Icons.cancel,
+                            color: Colors.red,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            await auth.signout();
                             Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                     builder: (context) => const UserTypeSelectionPage()),
@@ -172,6 +231,31 @@ class _StudentHomepageState extends State<StudentHomepage> {
             Spacer(),
           ],
         ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (isCreateMode) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                // builder: (context) => ShortAnswerScreen(),
+                builder: (context) => Scaffold(),
+              ),
+            );
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                // builder: (context) => Assignments(),
+                builder: (context) => Scaffold(),
+              ),
+            );
+          }
+        },
+        child: Icon(isCreateMode
+            ? Icons.short_text_sharp
+            : Icons.assignment), // Change icon based on mode
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
