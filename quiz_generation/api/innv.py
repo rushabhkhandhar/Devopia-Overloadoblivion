@@ -21,6 +21,7 @@ import transformers
 import keras_ocr
 import keras
 
+
 app = Flask(__name__)
 CORS(app)  # Enable CORS for the Flask app
 
@@ -42,7 +43,7 @@ prompt = PromptTemplate(
 stopwords = nltk.corpus.stopwords.words('english')
 lemmatizer = WordNetLemmatizer()
 tokenizer_bert = DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
-model = keras.models.load_model('best_model.h5')
+model = keras.models.load_model('/home/yuvraj/Coding/Innov8/automatedGrader/best_model.h5')
 
 # Initialize OpenAI and LLMChain
 llm = OpenAI(temperature=0.6)

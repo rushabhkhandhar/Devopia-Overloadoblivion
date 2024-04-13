@@ -17,9 +17,14 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from transformers import DistilBertTokenizer, TFDistilBertModel
+import pickle
+import pandas as pd
 import transformers
 import keras_ocr
 import keras
+
+from keras.models import load_model
+from keras.optimizers import Adam
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for the Flask app
@@ -145,7 +150,20 @@ prompt = PromptTemplate(
 stopwords = nltk.corpus.stopwords.words('english')
 lemmatizer = WordNetLemmatizer()
 tokenizer_bert = DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
-model = keras.models.load_model('best_model.h5')
+def load_custom_model(filepath):
+    model = load_model(filepath, custom_objects={
+        'DistilBertTokenizer': DistilBertTokenizer,
+        'TFDistilBertModel': TFDistilBertModel
+    },compile=False)
+    
+    # Change the optimizer to use compatible settings
+    optimizer = Adam()
+    model.compile(optimizer=optimizer, loss='binary_crossentropy', metrics=['accuracy'])
+    
+    return model
+
+model = load_custom_model('/home/yuvraj/Coding/Innov8/automatedGrader/best_model.h5')
+
 
 # Initialize OpenAI and LLMChain
 llm = OpenAI(temperature=0.6)
@@ -183,7 +201,7 @@ def clean_text(text):
 async def predict_async(text):
     tokenized_text = tokenizer_bert.encode(clean_text(text), padding='max_length', max_length=512, truncation=True, return_tensors='tf')
     prediction = model.predict(tokenized_text)
-    return np.argmax(prediction[0])
+    return int(np.argmax(prediction[0]))
 
 # Flask API endpoint to grade questions and answers
 @app.route('/grade', methods=['POST'])
@@ -216,7 +234,7 @@ def analyze_pdf(pdf):
     document_search = FAISS.from_texts(texts, embeddings)
 
     chain = load_qa_chain(OpenAI(), chain_type="stuff")
-    query = "give score out of 10 to each answer based on how much information it contains according to the question"
+    query = "summarize the document in 200 words"
     docs = document_search.similarity_search(query)
     analysis = chain.run(input_documents=docs, question=query)
     return analysis
@@ -244,5 +262,51 @@ async def predict_text():
     prediction = await predict_async(text)
     return jsonify({'prediction': prediction})
 
+
+# Load the model using pickle
+with open('/home/yuvraj/Coding/devopia/my_model.pkl', 'rb') as f:
+    loaded_model = pickle.load(f)
+
+app = Flask(__name__)
+
+changing_columns=['internet','romantic','paid','activities','studytime','freetime','traveltime','goout','absences']
+binary_columns=['internet','romantic','paid','activities']
+def predict_changes(df,g3):
+    model=loaded_model
+    df_copy=df.copy()
+    pos_changes=[]
+    for column in changing_columns:
+        df_copy=df
+        if column in binary_columns:
+            if df_copy.at[0,column]==1:
+                df_copy.at[0,column]=0
+                predicted_g3=model.predict(df_copy)[0]
+                print(f"Predicted g3 for {column}_inv: {predicted_g3}")
+                if(predicted_g3>g3):
+                    pos_changes.append(column+"_inv")
+                else:
+                    pos_changes.append(column)
+            else:
+                df_copy.at[0,column]=1
+                predicted_g3=model.predict(df_copy)[0]
+                print(f"Predicted g3 for {column}: {predicted_g3}")
+                if(predicted_g3>g3):
+                    pos_changes.append(column)
+                else:
+                    pos_changes.append(column+"inv")
+
+    pos_changes+=[column for column in changing_columns if column not in binary_columns]
+    return pos_changes
+
+@app.route('/predict_changes', methods=['POST'])
+def predict():
+    data = request.get_json()
+    df = pd.DataFrame(data)
+    model=loaded_model
+    g3=model.predict(df)[0]
+    changes=predict_changes(df,g3)
+    return jsonify({"possible_changes": changes})
+
 if __name__ == '__main__':
     app.run(debug=True)
+
