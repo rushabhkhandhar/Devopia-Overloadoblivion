@@ -5,7 +5,10 @@ import 'package:devopia_overload_oblivion/screens/user_type_selec.dart';
 import 'package:lottie/lottie.dart';
 
 class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
+  bool isSignedIn;
+   SplashScreen({super.key,
+    required this.isSignedIn ,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,7 @@ class SplashScreen extends StatelessWidget {
             )
           ],
         ),
-        nextScreen: UserTypeSelectionPage(),
+        nextScreen: isSignedIn ?const  Scaffold() : const UserTypeSelectionPage(),
         splashIconSize: 300,
         backgroundColor: Color.fromRGBO(99, 151, 255, 1),
       ),

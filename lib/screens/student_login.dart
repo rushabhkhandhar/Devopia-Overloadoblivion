@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:devopia_overload_oblivion/global/global_var.dart';
 import 'package:devopia_overload_oblivion/resources/auth_methods.dart';
-import 'package:devopia_overload_oblivion/screens/student_homepage.dart';
+// import 'package:devopia_overload_oblivion/screens/student_homepage.dart';
 import 'package:devopia_overload_oblivion/screens/student_signup.dart';
 import 'package:devopia_overload_oblivion/widgets/utils.dart';
 
@@ -32,7 +32,8 @@ class _StudentLoginState extends State<StudentLogin> {
       } else {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => const StudentHomepage(),
+            // builder: (context) => const StudentHomepage(),
+            builder: (context) => const Scaffold(),
           ),
         );
       }

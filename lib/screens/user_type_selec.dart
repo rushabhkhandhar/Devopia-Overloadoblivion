@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:devopia_overload_oblivion/global/global_var.dart';
 import 'package:devopia_overload_oblivion/screens/student_login.dart';
-import 'package:devopia_overload_oblivion/screens/teacher_login.dart';
+// import 'package:devopia_overload_oblivion/screens/teacher_login.dart';
 
 class UserTypeSelectionPage extends StatelessWidget {
   const UserTypeSelectionPage({super.key});
@@ -79,7 +79,8 @@ class UserTypeSelectionPage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const TeacherLogin(),
+                            // builder: (context) => const TeacherLogin(),
+                            builder: (context) => const Scaffold(),
                           ),
                         );
                       },
