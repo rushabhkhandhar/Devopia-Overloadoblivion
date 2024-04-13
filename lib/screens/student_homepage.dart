@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:devopia_overload_oblivion/resources/auth_methods.dart';
 import 'package:flutter/material.dart';
 
 import 'package:devopia_overload_oblivion/resources/database.dart';
-import 'package:devopia_overload_oblivion/screens/assignments.dart';
+// import 'package:devopia_overload_oblivion/screens/assignments.dart';
 
 import 'package:devopia_overload_oblivion/screens/quiz_play.dart';
-import 'package:devopia_overload_oblivion/screens/short_answer_screen.dart';
+// import 'package:devopia_overload_oblivion/screens/short_answer_screen.dart';
 import 'package:devopia_overload_oblivion/screens/user_type_selec.dart';
+
 
 
 class StudentHomepage extends StatefulWidget {
@@ -19,6 +21,7 @@ class StudentHomepage extends StatefulWidget {
 class _StudentHomepageState extends State<StudentHomepage> {
   Stream? quizStream;
   bool isCreateMode = true;
+  AuthMethods auth = AuthMethods();
 
   DatabaseService databaseService = new DatabaseService();
 
@@ -121,13 +124,18 @@ class _StudentHomepageState extends State<StudentHomepage> {
             ),
             ListTile(
               title: const Text('Sign Out'),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UserTypeSelectionPage(),
-                  ),
-                );
+              onTap: () async{
+                 await auth.signout();
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => const UserTypeSelectionPage()),
+                                (route) => false);
+                // Navigator.pushReplacement(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => UserTypeSelectionPage(),
+                //   ),
+                // );
               },
             ),
           ],
@@ -172,14 +180,16 @@ class _StudentHomepageState extends State<StudentHomepage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ShortAnswerScreen(),
+                // builder: (context) => ShortAnswerScreen(),
+                builder: (context) => Scaffold(),
               ),
             );
           } else {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Assignments(),
+                // builder: (context) => Assignments(),
+                builder: (context) => Scaffold(),
               ),
             );
           }

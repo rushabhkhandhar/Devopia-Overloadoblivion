@@ -1,3 +1,4 @@
+import 'package:devopia_overload_oblivion/screens/student_homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:devopia_overload_oblivion/global/global_var.dart';
 import 'package:devopia_overload_oblivion/resources/auth_methods.dart';
@@ -89,11 +90,11 @@ class _StudentLoginState extends State<StudentLogin> {
               const SizedBox(height: 45.0),
               ElevatedButton(
                 onPressed: () async {
-                  // Navigator.of(context).pushReplacement(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => const StudentHomepage(),
-                  //   ),
-                  // );
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const StudentHomepage(),
+                    ),
+                  );
                   await loginStudent();
                 },
                 style: ElevatedButton.styleFrom(

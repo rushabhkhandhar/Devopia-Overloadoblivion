@@ -1,4 +1,5 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:devopia_overload_oblivion/screens/student_homepage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:devopia_overload_oblivion/screens/user_type_selec.dart';
@@ -21,7 +22,7 @@ class SplashScreen extends StatelessWidget {
             )
           ],
         ),
-        nextScreen: isSignedIn ?const  Scaffold() : const UserTypeSelectionPage(),
+        nextScreen: isSignedIn ?const  StudentHomepage() : const UserTypeSelectionPage(),
         splashIconSize: 300,
         backgroundColor: Color.fromRGBO(99, 151, 255, 1),
       ),

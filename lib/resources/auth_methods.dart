@@ -58,15 +58,23 @@ class AuthMethods {
     String res = "Some error occured";
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
-        await _auth.signInWithEmailAndPassword(
-            email: email, password: password);
+      await _auth.signInWithEmailAndPassword(
+        email: email, password: password);
+        
+      HelperFunction.setUserLoggedInStatus(true);
+      HelperFunction.setUserEmailSF(email);
 
-           HelperFunction.setUserLoggedInStatus(true);
-          // HelperFunction.setUserNameSF( snapshot.docs[0]['fullName']);
-          HelperFunction.setUserEmailSF( email);
-        res = "Success";
+      DocumentSnapshot snapshot = await _firestore
+        .collection('students')
+        .doc(_auth.currentUser!.uid)
+        .get();
+
+      String studentname = snapshot.get('studentname');
+      // Do something with the studentname
+HelperFunction.setUserNameSF( studentname);
+      res = "Success";
       } else {
-        res = 'Please enter all the fields';
+      res = 'Please enter all the fields';
       }
       return res;
     } catch (err) {
