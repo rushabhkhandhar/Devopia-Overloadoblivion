@@ -4,7 +4,7 @@ import 'package:devopia_overload_oblivion/global/global_var.dart';
 import 'package:devopia_overload_oblivion/resources/database.dart';
 import 'dart:convert';
 
-import 'package:devopia_overload_oblivion/screens/ai_generated_page.dart';
+// import 'package:devopia_overload_oblivion/screens/ai_generated_page.dart';
 import 'package:devopia_overload_oblivion/widgets/blue_button.dart';
 import 'package:uuid/uuid.dart';
 
@@ -195,10 +195,10 @@ class _AIQuizInputPageState extends State<AIQuizInputPage> {
                                 [2],
                           );
                         }
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AIQuizPlay()),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(builder: (context) => AIQuizPlay()),
+                        // );
                       } else {
                         print("Error");
                       }
