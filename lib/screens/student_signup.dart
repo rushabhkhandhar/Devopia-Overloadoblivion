@@ -86,16 +86,15 @@ class _StudentSignupState extends State<StudentSignup> {
     super.dispose();
   }
 
-
   String selectedValue = "Grade 10";
   String grade = "10th Grade";
   String sex = "Male";
-  String Mjob="Mjob_at_home";
-  String Fjob="Fjob_at_home";
-  int Medu= 1;
-  int Fedu= 1;
-  int paid= 1;
-  int activities= 1;
+  String Mjob = "Mjob_at_home";
+  String Fjob = "Fjob_at_home";
+  int Medu = 1;
+  int Fedu = 1;
+  int paid = 1;
+  int activities = 1;
 
   getQuiz() async {
     switch (selectedValue) {
@@ -112,13 +111,7 @@ class _StudentSignupState extends State<StudentSignup> {
     final response = await http.post(
       Uri.parse('${GlobalVariables.Url}/get_questions'),
       body: json.encode(<String, dynamic>{
-        
         'grade': grade,
-      
-    
-      
-      
-      
       }),
       headers: <String, String>{'Content-Type': 'application/json'},
     );
@@ -154,50 +147,49 @@ class _StudentSignupState extends State<StudentSignup> {
     }
   }
 
-  
-   sendData() async {
-  final Map<String, dynamic> data = {
-     "age": [_ageController.text],
-  "Medu": [Medu],
-  "Fedu": [Fedu],
-  "traveltime": [_travelTime.text],
-  "studytime": [ _studyTime.text],
-  "failures": [0],
-  "paid": [1],
-  "activities": [1],
-  "higher": [1],
-  "internet": [1],
-  "romantic": [0],
-  "freetime": [3],
-  "goout": [3],
-  "absences": [4],
-  "sex_F": [0],
-  "sex_M": [1],
-  "Mjob_at_home": [0],
-  "Mjob_health": [0],
-  "Mjob_other": [0],
-  "Mjob_services": [1],
-  "Mjob_teacher": [0],
-  "Fjob_at_home": [0],
-  "Fjob_health": [0],
-  "Fjob_other": [0],
-  "Fjob_services": [1],
-  "Fjob_teacher": [0]
-  };
+  sendData() async {
+    final Map<String, dynamic> data = {
+      "age": [_ageController.text],
+      "Medu": [Medu],
+      "Fedu": [Fedu],
+      "traveltime": [_travelTime.text],
+      "studytime": [_studyTime.text],
+      "failures": [0],
+      "paid": [1],
+      "activities": [1],
+      "higher": [1],
+      "internet": [1],
+      "romantic": [0],
+      "freetime": [3],
+      "goout": [3],
+      "absences": [4],
+      "sex_F": [0],
+      "sex_M": [1],
+      "Mjob_at_home": [0],
+      "Mjob_health": [0],
+      "Mjob_other": [0],
+      "Mjob_services": [1],
+      "Mjob_teacher": [0],
+      "Fjob_at_home": [0],
+      "Fjob_health": [0],
+      "Fjob_other": [0],
+      "Fjob_services": [1],
+      "Fjob_teacher": [0]
+    };
 
-  final response = await http.post(
-    Uri.parse('${GlobalVariables.Url}/predict_changes'),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode(data),
-  );
+    final response = await http.post(
+      Uri.parse('${GlobalVariables.Url}/predict_changes'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
 
-  if (response.statusCode == 200) {
-    print('Data sent successfully!');
-    print(jsonDecode(response.body));
-  } else {
-    print('Request failed with status: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      print('Data sent successfully!');
+      print(jsonDecode(response.body));
+    } else {
+      print('Request failed with status: ${response.statusCode}');
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -283,7 +275,7 @@ class _StudentSignupState extends State<StudentSignup> {
                 const Text('Select a year'),
                 Container(
                   height: 70,
-                  width: 100,
+                  width: 130,
                   child: DropdownButton<String>(
                     elevation: 6,
                     value: selectedValue,
@@ -362,7 +354,8 @@ class _StudentSignupState extends State<StudentSignup> {
                       borderSide:
                           BorderSide(color: Color.fromRGBO(31, 68, 255, 0.776)),
                     ),
-                    labelText: 'What is your intensity of internet usage?(On a scale of 5)',
+                    labelText:
+                        'What is your intensity of internet usage?(On a scale of 5)',
                     floatingLabelStyle:
                         TextStyle(color: Color.fromRGBO(31, 68, 255, 0.776)),
                   ),
@@ -398,7 +391,6 @@ class _StudentSignupState extends State<StudentSignup> {
                         value: "Female",
                         child: Text("Female"),
                       ),
-                     
                     ],
                     onChanged: (String? newValue) {
                       setState(() {
@@ -433,7 +425,6 @@ class _StudentSignupState extends State<StudentSignup> {
                         value: "Mjob_other",
                         child: Text("Other"),
                       ),
-                     
                     ],
                     onChanged: (String? newValue) {
                       setState(() {
@@ -468,7 +459,6 @@ class _StudentSignupState extends State<StudentSignup> {
                         value: "Fjob_other",
                         child: Text("Other"),
                       ),
-                     
                     ],
                     onChanged: (String? newValue) {
                       setState(() {
@@ -495,8 +485,6 @@ class _StudentSignupState extends State<StudentSignup> {
                         value: 0,
                         child: Text("No"),
                       ),
-                      
-                     
                     ],
                     onChanged: (int? newValue) {
                       setState(() {
@@ -523,8 +511,6 @@ class _StudentSignupState extends State<StudentSignup> {
                         value: 0,
                         child: Text("No"),
                       ),
-                      
-                     
                     ],
                     onChanged: (int? newValue) {
                       setState(() {
@@ -551,8 +537,6 @@ class _StudentSignupState extends State<StudentSignup> {
                         value: 0,
                         child: Text("No"),
                       ),
-                      
-                     
                     ],
                     onChanged: (int? newValue) {
                       setState(() {
@@ -579,8 +563,6 @@ class _StudentSignupState extends State<StudentSignup> {
                         value: 0,
                         child: Text("No"),
                       ),
-                      
-                     
                     ],
                     onChanged: (int? newValue) {
                       setState(() {
@@ -590,18 +572,14 @@ class _StudentSignupState extends State<StudentSignup> {
                     },
                   ),
                 ),
-                
-
                 const SizedBox(height: 45.0),
                 ElevatedButton(
                   onPressed: () async {
-                    
-                    sendData().then((value){
+                    sendData().then((value) {
                       getQuiz().then((value) {
                         signUpStudent();
                       });
                     });
-                      
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromRGBO(31, 68, 255, 0.776),

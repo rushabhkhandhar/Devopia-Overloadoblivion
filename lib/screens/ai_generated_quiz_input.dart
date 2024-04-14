@@ -68,68 +68,68 @@ class _AIQuizInputPageState extends State<AIQuizInputPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                BlueButton(
-                    onTap: () async {
-                      final response = await http
-                          .get(Uri.parse('${GlobalVariables.Url}/categories'));
-                      if (response.statusCode == 200) {
-                        final decodedResponse = json.decode(response.body);
-                        setState(() {
-                          topics =
-                              List<Map<String, dynamic>>.from(decodedResponse);
-                        });
-                      } else {
-                        print("Error");
-                      }
-                    },
-                    text: 'Generate topics'),
-                SizedBox(height: 16.0),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: DataTable(
-                      columns: [
-                        DataColumn(
-                          label: Text(
-                            'ID',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Name',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          ),
-                        ),
-                      ],
-                      rows: topics.map((topic) {
-                        return DataRow(
-                          cells: [
-                            DataCell(
-                              Text(
-                                '${topic['id']}',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-                            ),
-                            DataCell(
-                              Text(
-                                topic['name'],
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-                            ),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
+                // BlueButton(
+                //     onTap: () async {
+                //       final response = await http
+                //           .get(Uri.parse('${GlobalVariables.Url}/categories'));
+                //       if (response.statusCode == 200) {
+                //         final decodedResponse = json.decode(response.body);
+                //         setState(() {
+                //           topics =
+                //               List<Map<String, dynamic>>.from(decodedResponse);
+                //         });
+                //       } else {
+                //         print("Error");
+                //       }
+                //     },
+                //     text: 'Generate topics'),
+                // SizedBox(height: 16.0),
+                // Expanded(
+                //   child: SingleChildScrollView(
+                //     child: DataTable(
+                //       columns: [
+                //         DataColumn(
+                //           label: Text(
+                //             'ID',
+                //             style: TextStyle(
+                //                 fontWeight: FontWeight.bold,
+                //                 color: Colors.black),
+                //           ),
+                //         ),
+                //         DataColumn(
+                //           label: Text(
+                //             'Name',
+                //             style: TextStyle(
+                //                 fontWeight: FontWeight.bold,
+                //                 color: Colors.black),
+                //           ),
+                //         ),
+                //       ],
+                //       rows: topics.map((topic) {
+                //         return DataRow(
+                //           cells: [
+                //             DataCell(
+                //               Text(
+                //                 '${topic['id']}',
+                //                 style: TextStyle(
+                //                     fontWeight: FontWeight.bold,
+                //                     color: Colors.black),
+                //               ),
+                //             ),
+                //             DataCell(
+                //               Text(
+                //                 topic['name'],
+                //                 style: TextStyle(
+                //                     fontWeight: FontWeight.bold,
+                //                     color: Colors.black),
+                //               ),
+                //             ),
+                //           ],
+                //         );
+                //       }).toList(),
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(height: 16.0),
                 DropdownButtonFormField<String>(
                   decoration: const InputDecoration(

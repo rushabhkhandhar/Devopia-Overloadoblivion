@@ -24,8 +24,6 @@ import 'package:devopia_overload_oblivion/screens/user_type_selec.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-
-
 class StudentHomepage extends StatefulWidget {
   const StudentHomepage({super.key});
 
@@ -281,33 +279,31 @@ class _StudentHomepageState extends State<StudentHomepage> {
               height: 2,
             ),
             ListTile(
-            onTap:(){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>StudentHomepage()));
-            },
-            selectedColor: Theme.of(context).primaryColor,
-            selected: true,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            leading: const Icon(Icons.group),
-            title: const Text("Dashboard",style:TextStyle(color: Colors.black)),
-            
-            
-
-          ),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => StudentHomepage()));
+              },
+              selectedColor: Theme.of(context).primaryColor,
+              selected: true,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              leading: const Icon(Icons.group),
+              title: const Text("Dashboard",
+                  style: TextStyle(color: Colors.black)),
+            ),
             ListTile(
-            onTap:(){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage2()));
-            },
-            selectedColor: Theme.of(context).primaryColor,
-            selected: true,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            leading: const Icon(Icons.group),
-            title: const Text("Homepage",style:TextStyle(color: Colors.black)),
-            
-            
-
-          ),
-          
-          
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomePage2()));
+              },
+              selectedColor: Theme.of(context).primaryColor,
+              selected: true,
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              leading: const Icon(Icons.group),
+              title:
+                  const Text("Homepage", style: TextStyle(color: Colors.black)),
+            ),
             ListTile(
               onTap: () async {
                 showDialog(
@@ -461,7 +457,7 @@ class _StudentHomepageState extends State<StudentHomepage> {
                           child: Text(
                             "Adaptive Learning",
                             style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: Color.fromARGB(255, 255, 255, 255)),
                           ),
@@ -471,7 +467,7 @@ class _StudentHomepageState extends State<StudentHomepage> {
                           child: Text(
                             "Personalized learning experience",
                             style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 11,
                                 fontWeight: FontWeight.bold,
                                 color: Color.fromARGB(255, 255, 255, 255)),
                           ),
@@ -479,7 +475,7 @@ class _StudentHomepageState extends State<StudentHomepage> {
                         Padding(
                             padding: const EdgeInsets.fromLTRB(10, 0, 0, 15),
                             child: ElevatedButton(
-                              onPressed: ()  {
+                              onPressed: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -497,7 +493,7 @@ class _StudentHomepageState extends State<StudentHomepage> {
               SizedBox(
                 height: 20,
               ),
-             Container(
+              Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -684,7 +680,7 @@ class QuizTile extends StatelessWidget {
             ],
           ),
         ),
-     ),
-);
-}
+      ),
+    );
+  }
 }
