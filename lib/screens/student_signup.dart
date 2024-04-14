@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:devopia_overload_oblivion/resources/database.dart';
 import 'package:devopia_overload_oblivion/screens/quiz_play.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +21,11 @@ class _StudentSignupState extends State<StudentSignup> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _cpassController = TextEditingController();
+  TextEditingController _travelTime = TextEditingController();
+  TextEditingController _ageController = TextEditingController();
+  TextEditingController _studyTime = TextEditingController();
+  TextEditingController _internet = TextEditingController();
+  TextEditingController _freeTime = TextEditingController();
   bool isLoading = false;
   String quizId = Uuid().v1();
   DatabaseService databaseService = DatabaseService();
@@ -82,10 +86,19 @@ class _StudentSignupState extends State<StudentSignup> {
     super.dispose();
   }
 
+
   String selectedValue = "Grade 10";
   String grade = "10th Grade";
+  String sex = "Male";
+  String Mjob="Mjob_at_home";
+  String Fjob="Fjob_at_home";
+  int Medu= 1;
+  int Fedu= 1;
+  int paid= 1;
+  int activities= 1;
+
   getQuiz() async {
-    switch (grade) {
+    switch (selectedValue) {
       case "Grade 10":
         grade = "10th Grade";
         break;
@@ -98,7 +111,15 @@ class _StudentSignupState extends State<StudentSignup> {
     }
     final response = await http.post(
       Uri.parse('${GlobalVariables.Url}/get_questions'),
-      body: json.encode(<String, dynamic>{'grade': grade}),
+      body: json.encode(<String, dynamic>{
+        
+        'grade': grade,
+      
+    
+      
+      
+      
+      }),
       headers: <String, String>{'Content-Type': 'application/json'},
     );
     if (response.statusCode == 200) {
@@ -130,6 +151,43 @@ class _StudentSignupState extends State<StudentSignup> {
     } else {
       print("Error");
     }
+  }
+
+  getData() async {
+    final res = await http.post(
+      Uri.parse('${GlobalVariables.Url}/predict_changes'),
+       body: json.encode(<String, dynamic>{
+        'age': [_ageController],
+      'Medu':[Medu],
+      'Fedu':[Fedu],
+      'traveltime': [_travelTime],
+      'studytime': [ _studyTime],
+      'failures':[1],
+      'higher':[1],
+      'internet': [_internet],
+      'paid':[paid],
+      'activities':[activities],
+      'romantic':[1],
+      'freetime': [_freeTime],
+      'goout':[1],
+      'absences':[1],
+      "sex_F": [0],
+    'sex_M': [1],
+    "Mjob_at_home": [0],
+    "Mjob_health": [0],
+    "Mjob_other": [0],
+    "Mjob_services": [1],
+    "Mjob_teacher": [0],
+    "Fjob_at_home": [0],
+    "Fjob_health": [0],
+    "Fjob_other": [0],
+    "Fjob_services": [1],
+    "Fjob_teacher": [0]
+       }),
+      headers: <String, String>{'Content-Type': 'application/json'},
+      
+    );
+    print(jsonDecode(res.body));
   }
 
   @override
@@ -216,7 +274,7 @@ class _StudentSignupState extends State<StudentSignup> {
                 const Text('Select a year'),
                 Container(
                   height: 70,
-                  width: 80,
+                  width: 100,
                   child: DropdownButton<String>(
                     elevation: 6,
                     value: selectedValue,
@@ -245,10 +303,292 @@ class _StudentSignupState extends State<StudentSignup> {
                 const SizedBox(
                   height: 16,
                 ),
+                TextField(
+                  controller: _ageController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromRGBO(31, 68, 255, 0.776)),
+                    ),
+                    labelText: 'Age',
+                    floatingLabelStyle:
+                        TextStyle(color: Color.fromRGBO(31, 68, 255, 0.776)),
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                TextField(
+                  controller: _travelTime,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromRGBO(31, 68, 255, 0.776)),
+                    ),
+                    labelText: 'What is your travel time to school? (in hours)',
+                    floatingLabelStyle:
+                        TextStyle(color: Color.fromRGBO(31, 68, 255, 0.776)),
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                TextField(
+                  controller: _studyTime,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromRGBO(31, 68, 255, 0.776)),
+                    ),
+                    labelText: 'What is your study time? (in hours)',
+                    floatingLabelStyle:
+                        TextStyle(color: Color.fromRGBO(31, 68, 255, 0.776)),
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                TextField(
+                  controller: _internet,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromRGBO(31, 68, 255, 0.776)),
+                    ),
+                    labelText: 'What is your intensity of internet usage?(On a scale of 5)',
+                    floatingLabelStyle:
+                        TextStyle(color: Color.fromRGBO(31, 68, 255, 0.776)),
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                TextField(
+                  controller: _freeTime,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromRGBO(31, 68, 255, 0.776)),
+                    ),
+                    labelText: ' What is your free time? (in hours)',
+                    floatingLabelStyle:
+                        TextStyle(color: Color.fromRGBO(31, 68, 255, 0.776)),
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                const Text('Gender'),
+                Container(
+                  height: 70,
+                  width: 200,
+                  child: DropdownButton<String>(
+                    elevation: 6,
+                    value: sex,
+                    items: const <DropdownMenuItem<String>>[
+                      DropdownMenuItem(
+                        value: "Male",
+                        child: Text("Male"),
+                      ),
+                      DropdownMenuItem(
+                        value: "Female",
+                        child: Text("Female"),
+                      ),
+                     
+                    ],
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        sex = newValue!;
+                        // Perform actions based on the selected value
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                const Text('What is your Mother\'s job?'),
+                Container(
+                  height: 70,
+                  width: 200,
+                  child: DropdownButton<String>(
+                    elevation: 6,
+                    value: Mjob,
+                    items: const <DropdownMenuItem<String>>[
+                      DropdownMenuItem(
+                        value: "Mjob_at_home",
+                        child: Text("HouseWife"),
+                      ),
+                      DropdownMenuItem(
+                        value: "Mjob_health",
+                        child: Text("Healthcare"),
+                      ),
+                      DropdownMenuItem(
+                        value: "Mjob_services",
+                        child: Text("Service"),
+                      ),
+                      DropdownMenuItem(
+                        value: "Mjob_other",
+                        child: Text("Other"),
+                      ),
+                     
+                    ],
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Mjob = newValue!;
+                        // Perform actions based on the selected value
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                const Text('What is your Father\'s job?'),
+                Container(
+                  height: 70,
+                  width: 200,
+                  child: DropdownButton<String>(
+                    elevation: 6,
+                    value: Fjob,
+                    items: const <DropdownMenuItem<String>>[
+                      DropdownMenuItem(
+                        value: "Fjob_at_home",
+                        child: Text("HouseHusband"),
+                      ),
+                      DropdownMenuItem(
+                        value: "Fjob_health",
+                        child: Text("Healthcare"),
+                      ),
+                      DropdownMenuItem(
+                        value: "Fjob_services",
+                        child: Text("Service"),
+                      ),
+                      DropdownMenuItem(
+                        value: "Fjob_other",
+                        child: Text("Other"),
+                      ),
+                     
+                    ],
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        Fjob = newValue!;
+                        // Perform actions based on the selected value
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                const Text('Is your mother educated?'),
+                Container(
+                  height: 70,
+                  width: 200,
+                  child: DropdownButton<int>(
+                    elevation: 6,
+                    value: Medu,
+                    items: const <DropdownMenuItem<int>>[
+                      DropdownMenuItem(
+                        value: 1,
+                        child: Text("Yes"),
+                      ),
+                      DropdownMenuItem(
+                        value: 0,
+                        child: Text("No"),
+                      ),
+                      
+                     
+                    ],
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        Medu = newValue!;
+                        // Perform actions based on the selected value
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                const Text('Is your Father educated?'),
+                Container(
+                  height: 70,
+                  width: 200,
+                  child: DropdownButton<int>(
+                    elevation: 6,
+                    value: Fedu,
+                    items: const <DropdownMenuItem<int>>[
+                      DropdownMenuItem(
+                        value: 1,
+                        child: Text("Yes"),
+                      ),
+                      DropdownMenuItem(
+                        value: 0,
+                        child: Text("No"),
+                      ),
+                      
+                     
+                    ],
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        Fedu = newValue!;
+                        // Perform actions based on the selected value
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                const Text('Do you pay for extra classes?'),
+                Container(
+                  height: 70,
+                  width: 200,
+                  child: DropdownButton<int>(
+                    elevation: 6,
+                    value: paid,
+                    items: const <DropdownMenuItem<int>>[
+                      DropdownMenuItem(
+                        value: 1,
+                        child: Text("Yes"),
+                      ),
+                      DropdownMenuItem(
+                        value: 0,
+                        child: Text("No"),
+                      ),
+                      
+                     
+                    ],
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        paid = newValue!;
+                        // Perform actions based on the selected value
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                const Text('Do you do any extra-curricular activities?'),
+                Container(
+                  height: 70,
+                  width: 200,
+                  child: DropdownButton<int>(
+                    elevation: 6,
+                    value: activities,
+                    items: const <DropdownMenuItem<int>>[
+                      DropdownMenuItem(
+                        value: 1,
+                        child: Text("Yes"),
+                      ),
+                      DropdownMenuItem(
+                        value: 0,
+                        child: Text("No"),
+                      ),
+                      
+                     
+                    ],
+                    onChanged: (int? newValue) {
+                      setState(() {
+                        activities = newValue!;
+                        // Perform actions based on the selected value
+                      });
+                    },
+                  ),
+                ),
+                
+
                 const SizedBox(height: 45.0),
                 ElevatedButton(
                   onPressed: () async {
-                    getQuiz().then((value) async => await signUpStudent());
+                    getData().then();
+                    
+
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromRGBO(31, 68, 255, 0.776),

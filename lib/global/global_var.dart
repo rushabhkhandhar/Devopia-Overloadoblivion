@@ -8,5 +8,5 @@ class GlobalVariables {
       end: Alignment.bottomCenter);
   static const fontsize = 33;
 
-  static String Url = 'https://6da7-115-112-43-148.ngrok-free.app';
+  static String Url = 'https://060b-115-112-43-148.ngrok-free.app';
 }
