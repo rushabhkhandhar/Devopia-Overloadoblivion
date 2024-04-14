@@ -1,18 +1,24 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devopia_overload_oblivion/Helper/helper_function.dart';
+import 'package:devopia_overload_oblivion/global/global_var.dart';
 import 'package:devopia_overload_oblivion/models/student_model.dart';
 import 'package:devopia_overload_oblivion/providers/student_provider.dart';
 import 'package:devopia_overload_oblivion/resources/auth_methods.dart';
+import 'package:devopia_overload_oblivion/screens/adaptive_learning.dart';
 import 'package:devopia_overload_oblivion/screens/assignments.dart';
+import 'package:devopia_overload_oblivion/screens/results.dart';
 import 'package:devopia_overload_oblivion/screens/short_answer_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:devopia_overload_oblivion/resources/database.dart';
 import 'package:devopia_overload_oblivion/screens/quiz_play.dart';
 import 'package:devopia_overload_oblivion/screens/user_type_selec.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class StudentHomepage extends StatefulWidget {
   const StudentHomepage({super.key});
@@ -26,8 +32,26 @@ class _StudentHomepageState extends State<StudentHomepage> {
   bool isCreateMode = true;
   AuthMethods auth = AuthMethods();
   FirebaseAuth firebaseauth = FirebaseAuth.instance;
-
+  bool isLoading = false;
   DatabaseService databaseService = new DatabaseService();
+  Map<String, dynamic> easyQuestions = {};
+  Map<String, dynamic> mediumQuestions = {};
+  Map<String, dynamic> hardQuestions = {};
+  final List<ChartData> chartData = [
+    ChartData('Monday', 30),
+    ChartData(
+      'Tuesday',
+      70,
+    ),
+    ChartData(
+      'Wednesday',
+      90,
+    ),
+    ChartData(
+      'Thursday',
+      85,
+    ),
+  ];
 
   Widget quizList() {
     return SingleChildScrollView(
@@ -104,14 +128,96 @@ class _StudentHomepageState extends State<StudentHomepage> {
   @override
   Widget build(BuildContext context) {
     Student student = studentProvider.getUser();
+    String grade = "Grade 10";
+    getAdaptiveDataEasy() async {
+      switch (student.year) {
+        case "Grade 10":
+          grade = "10th Grade";
+          break;
+        case "Grade 11":
+          grade = "11th Grade";
+          break;
+        case "Grade 12":
+          grade = "12th Grade";
+          break;
+      }
+      final response = await http.post(
+        Uri.parse('${GlobalVariables.Url}/adaptive_easy'),
+        body: json.encode(<String, dynamic>{'grade': grade}),
+        headers: <String, String>{'Content-Type': 'application/json'},
+      );
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body);
+        if (jsonData.containsKey('questions')) {
+          easyQuestions.addAll(jsonData);
+        } else {
+          print("Error: 'questions' key not found in response");
+        }
+        //}
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => AIQuizPlay()),
+        // );
+      } else {
+        print("Error");
+      }
+    }
+
+    getAdaptiveDataMedium() async {
+      final response = await http.post(
+        Uri.parse('${GlobalVariables.Url}/adaptive_medium'),
+        body: json.encode(<String, dynamic>{'grade': student.year}),
+        headers: <String, String>{'Content-Type': 'application/json'},
+      );
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body);
+        if (jsonData.containsKey('questions')) {
+          mediumQuestions.addAll(jsonData);
+        } else {
+          print("Error: 'questions' key not found in response");
+        }
+        //}
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => AIQuizPlay()),
+        // );
+      } else {
+        print("Error");
+      }
+    }
+
+    getAdaptiveDataHard() async {
+      final response = await http.post(
+        Uri.parse('${GlobalVariables.Url}/adaptive_hard'),
+        body: json.encode(<String, dynamic>{'grade': student.year}),
+        headers: <String, String>{'Content-Type': 'application/json'},
+      );
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body);
+        if (jsonData.containsKey('questions')) {
+          hardQuestions.addAll(jsonData);
+        } else {
+          print("Error: 'questions' key not found in response");
+        }
+        //}
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => AIQuizPlay()),
+        // );
+      } else {
+        print("Error");
+      }
+    }
+
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 215, 252),
+      backgroundColor: Color.fromARGB(255, 175, 217, 255),
       appBar: AppBar(
         title: Text(
           'Hello, $name!',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
         actions: [
@@ -127,6 +233,7 @@ class _StudentHomepageState extends State<StudentHomepage> {
         backgroundColor: Colors.transparent,
       ),
       drawer: Drawer(
+        surfaceTintColor: Colors.white,
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 50),
           children: <Widget>[
@@ -197,11 +304,11 @@ class _StudentHomepageState extends State<StudentHomepage> {
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color.fromARGB(255, 255, 255, 255),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
@@ -219,10 +326,9 @@ class _StudentHomepageState extends State<StudentHomepage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const Icon(
-                        Icons.account_circle,
-                        size: 150,
-                        color: Colors.grey,
+                      CircleAvatar(
+                        radius: 70,
+                        backgroundImage: AssetImage('assets/images/User.jpeg'),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,14 +362,95 @@ class _StudentHomepageState extends State<StudentHomepage> {
               ),
               Text(
                 "Student Report",
-                style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 0, 0, 0)),
               ),
               SizedBox(
                 height: 10,
               ),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color.fromARGB(255, 62, 146, 255),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+                width: MediaQuery.of(context).size.width - 10,
+                height: 200,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 15),
+                      child: SizedBox(
+                        height: 130,
+                        width: 130,
+                        child: Image.asset(
+                          'assets/images/adaptive.png.png',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 40, 0, 15),
+                          child: Text(
+                            "Adaptive Learning",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 255, 255, 255)),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 15),
+                          child: Text(
+                            "Personalized learning experience",
+                            style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 255, 255, 255)),
+                          ),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 15),
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                await getAdaptiveDataEasy().then((value) {
+                                  getAdaptiveDataMedium().then((value) {
+                                    getAdaptiveDataHard().then((value) {
+                                      QuestionManager questionManager =
+                                          QuestionManager(easyQuestions,
+                                              mediumQuestions, hardQuestions);
+                                      print(easyQuestions);
+                                      print(mediumQuestions);
+                                      print(hardQuestions);
+                                      questionManager.getNextQuestion();
+                                    });
+                                  });
+                                });
+                              },
+                              child: Text("Take the quiz now"),
+                            )),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 255, 255, 255),
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
@@ -295,26 +482,18 @@ class _StudentHomepageState extends State<StudentHomepage> {
                 ),
                 width: MediaQuery.of(context).size.width - 10,
                 height: 200,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 10,
-                      spreadRadius: 2,
-                      offset: Offset(0, 4),
-                    ),
+                child: SfCartesianChart(
+                  primaryXAxis: CategoryAxis(),
+                  series: <LineSeries<ChartData, String>>[
+                    LineSeries<ChartData, String>(
+                      dataSource: chartData,
+                      xValueMapper: (ChartData sales, _) => sales.x,
+                      yValueMapper: (ChartData sales, _) => sales.y,
+                      dataLabelSettings: DataLabelSettings(isVisible: true),
+                    )
                   ],
                 ),
-                width: MediaQuery.of(context).size.width - 10,
-                height: 200,
-              )
+              ),
             ],
           ),
         ),
