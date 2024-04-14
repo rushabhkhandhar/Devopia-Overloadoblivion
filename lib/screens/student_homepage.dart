@@ -7,7 +7,10 @@ import 'package:devopia_overload_oblivion/models/student_model.dart';
 import 'package:devopia_overload_oblivion/providers/student_provider.dart';
 import 'package:devopia_overload_oblivion/resources/auth_methods.dart';
 import 'package:devopia_overload_oblivion/screens/adaptive_learning.dart';
+import 'package:devopia_overload_oblivion/screens/ai_generated_page.dart';
+import 'package:devopia_overload_oblivion/screens/ai_generated_quiz_input.dart';
 import 'package:devopia_overload_oblivion/screens/assignments.dart';
+import 'package:devopia_overload_oblivion/screens/create_ai_quiz.dart';
 import 'package:devopia_overload_oblivion/screens/results.dart';
 import 'package:devopia_overload_oblivion/screens/short_answer_screen.dart';
 import 'package:devopia_overload_oblivion/screens/student_home2.dart';
@@ -71,12 +74,12 @@ class _StudentHomepageState extends State<StudentHomepage> {
     ),
   ];
 
-List<ChartData> _chartData2 = [
-  ChartData('Jan', 30),
-  ChartData('Feb', 40),
-  ChartData('Mar', 25),
-  ChartData('Apr', 50),
-];
+// List<ChartData> _chartData2 = [
+//   ChartData('Jan', 30),
+//   ChartData('Feb', 40),
+//   ChartData('Mar', 25),
+//   ChartData('Apr', 50),
+// ];
 
   Widget quizList() {
     return SingleChildScrollView(
@@ -476,20 +479,13 @@ List<ChartData> _chartData2 = [
                         Padding(
                             padding: const EdgeInsets.fromLTRB(10, 0, 0, 15),
                             child: ElevatedButton(
-                              onPressed: () async {
-                                await getAdaptiveDataEasy().then((value) {
-                                  getAdaptiveDataMedium().then((value) {
-                                    getAdaptiveDataHard().then((value) {
-                                      QuestionManager questionManager =
-                                          QuestionManager(easyQuestions,
-                                              mediumQuestions, hardQuestions);
-                                      print(easyQuestions);
-                                      print(mediumQuestions);
-                                      print(hardQuestions);
-                                      questionManager.getNextQuestion();
-                                    });
-                                  });
-                                });
+                              onPressed: ()  {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CreateAIQuiz(),
+                                  ),
+                                );
                               },
                               child: Text("Take the quiz now"),
                             )),
