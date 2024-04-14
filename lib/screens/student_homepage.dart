@@ -8,6 +8,7 @@ import 'package:devopia_overload_oblivion/providers/student_provider.dart';
 import 'package:devopia_overload_oblivion/resources/auth_methods.dart';
 import 'package:devopia_overload_oblivion/screens/adaptive_learning.dart';
 import 'package:devopia_overload_oblivion/screens/assignments.dart';
+import 'package:devopia_overload_oblivion/screens/results.dart';
 import 'package:devopia_overload_oblivion/screens/short_answer_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,6 +18,7 @@ import 'package:devopia_overload_oblivion/resources/database.dart';
 import 'package:devopia_overload_oblivion/screens/quiz_play.dart';
 import 'package:devopia_overload_oblivion/screens/user_type_selec.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class StudentHomepage extends StatefulWidget {
   const StudentHomepage({super.key});
@@ -35,6 +37,21 @@ class _StudentHomepageState extends State<StudentHomepage> {
   Map<String, dynamic> easyQuestions = {};
   Map<String, dynamic> mediumQuestions = {};
   Map<String, dynamic> hardQuestions = {};
+  final List<ChartData> chartData = [
+    ChartData('Monday', 30),
+    ChartData(
+      'Tuesday',
+      70,
+    ),
+    ChartData(
+      'Wednesday',
+      90,
+    ),
+    ChartData(
+      'Thursday',
+      85,
+    ),
+  ];
 
   Widget quizList() {
     return SingleChildScrollView(
@@ -452,7 +469,7 @@ class _StudentHomepageState extends State<StudentHomepage> {
               ),
               Container(
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 255, 255, 255),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
@@ -465,7 +482,18 @@ class _StudentHomepageState extends State<StudentHomepage> {
                 ),
                 width: MediaQuery.of(context).size.width - 10,
                 height: 200,
-              )
+                child: SfCartesianChart(
+                  primaryXAxis: CategoryAxis(),
+                  series: <LineSeries<ChartData, String>>[
+                    LineSeries<ChartData, String>(
+                      dataSource: chartData,
+                      xValueMapper: (ChartData sales, _) => sales.x,
+                      yValueMapper: (ChartData sales, _) => sales.y,
+                      dataLabelSettings: DataLabelSettings(isVisible: true),
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
