@@ -45,14 +45,14 @@ class _ShortAnswerScreenState extends State<ShortAnswerScreen> {
       if (response.statusCode == 200) {
         // Display success message
         print(jsonDecode(response.body));
-        score = jsonDecode(response.body)['score'];
+        int score = jsonDecode(response.body)['prediction'];
 
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Success'),
             content: Text(
-                'Essay submitted successfully.\nYou have got score: $score'),
+                'Essay submitted successfully.\n You have got score: $score'),
             actions: [
               TextButton(
                 onPressed: () {
@@ -89,8 +89,7 @@ class _ShortAnswerScreenState extends State<ShortAnswerScreen> {
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Error'),
-          content: const Text(
-              'An error occurred while submitting question, answer, and essay.'),
+          content: Text(e.toString()),
           actions: [
             TextButton(
               onPressed: () {
@@ -147,6 +146,7 @@ class _ShortAnswerScreenState extends State<ShortAnswerScreen> {
       if (response.statusCode == 200) {
         // Display success message
         score = jsonDecode(response.body)['score'];
+        print(score);
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -316,8 +316,8 @@ class _ShortAnswerScreenState extends State<ShortAnswerScreen> {
                   shadowColor: Colors.black54, // Set button text color
                   minimumSize: Size(double.infinity, 50),
                 ),
-                onPressed: () {
-                  submitQuestionAndAnswer();
+                onPressed: () async {
+                  await submitQuestionAndAnswer();
                 },
                 child: const Text(
                   'Submit',
@@ -339,8 +339,8 @@ class _ShortAnswerScreenState extends State<ShortAnswerScreen> {
                   shadowColor: Colors.black54, // Set button text color
                   minimumSize: Size(double.infinity, 50),
                 ),
-                onPressed: () {
-                  essayViaScript();
+                onPressed: () async {
+                  await essayViaScript();
                 },
                 child: const Text(
                   'Submit Essay',
