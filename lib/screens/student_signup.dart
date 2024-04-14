@@ -124,6 +124,7 @@ class _StudentSignupState extends State<StudentSignup> {
     );
     if (response.statusCode == 200) {
       var jsonData = jsonDecode(response.body);
+      print(jsonData);
       if (jsonData.containsKey('questions')) {
         for (var questionData in jsonData['questions']) {
           String question = questionData['question'];
@@ -153,47 +154,7 @@ class _StudentSignupState extends State<StudentSignup> {
     }
   }
 
-  // getData() async {
-  //   final res = await http.post(
-  //     Uri.parse('${GlobalVariables.Url}/predict_changes'),
-  //      body: json.encode(<String, dynamic>{
-    //     'age': [_ageController.text],
-    //   'Medu':[Medu],
-    //   'Fedu':[Fedu],
-    //   'traveltime': [_travelTime.text],
-    //   'studytime': [ _studyTime.text],
-    //   'failures':[1],
-    //   'higher':[1],
-    //   'internet': [_internet.text],
-    //   'paid':[paid],
-    //   'activities':[activities],
-    //   'romantic':[1],
-    //   'freetime': [_freeTime.text],
-    //   'goout':[1],
-    //   'absences':[1],
-    //   "sex_F": [0],
-    // 'sex_M': [1],
-    // "Mjob_at_home": [0],
-    // "Mjob_health": [0],
-    // "Mjob_other": [0],
-    // "Mjob_services": [1],
-    // "Mjob_teacher": [0],
-    // "Fjob_at_home": [0],
-    // "Fjob_health": [0],
-    // "Fjob_other": [0],
-    // "Fjob_services": [1],
-    // "Fjob_teacher": [0]
-  //      }),
-  //     headers: <String, String>{'Content-Type': 'application/json'},
-      
-  //   );
-  //   if (res.statusCode == 200) {
-  //      print(jsonDecode(res.body));
-  //   }else{
-  //     print(jsonDecode(res.body));
-
-  //   }
-  // }
+  
    sendData() async {
   final Map<String, dynamic> data = {
      "age": [_ageController.text],
@@ -635,8 +596,12 @@ class _StudentSignupState extends State<StudentSignup> {
                 ElevatedButton(
                   onPressed: () async {
                     
-                    sendData();
-
+                    sendData().then((value){
+                      getQuiz().then((value) {
+                        signUpStudent();
+                      });
+                    });
+                      
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromRGBO(31, 68, 255, 0.776),

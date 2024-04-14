@@ -1,7 +1,10 @@
+import 'package:devopia_overload_oblivion/screens/assignments.dart';
+import 'package:devopia_overload_oblivion/screens/short_answer_screen.dart';
+import 'package:devopia_overload_oblivion/screens/student_homepage.dart';
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devopia_overload_oblivion/Helper/helper_function.dart';
 import 'package:devopia_overload_oblivion/resources/auth_methods.dart';
-import 'package:flutter/material.dart';
 import 'package:devopia_overload_oblivion/global/global_var.dart';
 import 'package:devopia_overload_oblivion/providers/teacher_provider.dart';
 import 'package:devopia_overload_oblivion/resources/database.dart';
@@ -12,24 +15,21 @@ import 'package:devopia_overload_oblivion/screens/create_quiz.dart';
 import 'package:devopia_overload_oblivion/screens/quiz_play.dart';
 import 'package:devopia_overload_oblivion/screens/user_type_selec.dart';
 
-
-class TeacherHomepage extends StatefulWidget {
-   TeacherHomepage({super.key});
-  
+class HomePage2 extends StatefulWidget {
+  const HomePage2({super.key});
 
   @override
-  State<TeacherHomepage> createState() => _TeacherHomepageState();
+  State<HomePage2> createState() => _HomePage2State();
 }
 
-class _TeacherHomepageState extends State<TeacherHomepage> {
-  Stream? quizStream;
+class _HomePage2State extends State<HomePage2> {
+   Stream? quizStream;
   bool isCreateMode = true;
   AuthMethods auth = AuthMethods();
   String email = "";
   String name = "";
 
   DatabaseService databaseService = new DatabaseService();
-
   Widget quizList() {
     return SingleChildScrollView(
       child: Container(
@@ -90,14 +90,9 @@ class _TeacherHomepageState extends State<TeacherHomepage> {
     });
     
   }
-
-  // addData() async {
-  //   TeacherProvider _teacherProvider =
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Scaffold(
       backgroundColor: Color.fromARGB(255, 175, 217, 255),
       appBar: AppBar(
       title: Text(
@@ -121,6 +116,7 @@ class _TeacherHomepageState extends State<TeacherHomepage> {
     ),
     
       drawer:Drawer(
+        surfaceTintColor: Colors.white,
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 50),
           children: <Widget>[
@@ -137,55 +133,81 @@ class _TeacherHomepageState extends State<TeacherHomepage> {
             ),
             const SizedBox(height: 30),
             const Divider(
-            height: 2,
+              height: 2,
+            ),
+            ListTile(
+            onTap:(){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>StudentHomepage()));
+            },
+            selectedColor: Theme.of(context).primaryColor,
+            selected: true,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            leading: const Icon(Icons.group),
+            title: const Text("Dashboard",style:TextStyle(color: Colors.black)),
+            
+            
+
+          ),
+            ListTile(
+            onTap:(){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage2()));
+            },
+            selectedColor: Theme.of(context).primaryColor,
+            selected: true,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            leading: const Icon(Icons.group),
+            title: const Text("Homepage",style:TextStyle(color: Colors.black)),
+            
+            
+
           ),
           
-         
-          ListTile(
-            onTap: () async {
-              showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text("Logout"),
-                      content: const Text("Are you sure you want to logout?"),
-                      actions: [
-                        IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(
-                            Icons.cancel,
-                            color: Colors.red,
+          
+            ListTile(
+              onTap: () async {
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("Logout"),
+                        content: const Text("Are you sure you want to logout?"),
+                        actions: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(
+                              Icons.cancel,
+                              color: Colors.red,
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            await auth.signout();
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) => const UserTypeSelectionPage()),
-                                (route) => false);
-                          },
-                          icon: const Icon(
-                            Icons.done,
-                            color: Colors.green,
+                          IconButton(
+                            onPressed: () async {
+                              await auth.signout();
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const UserTypeSelectionPage()),
+                                  (route) => false);
+                            },
+                            icon: const Icon(
+                              Icons.done,
+                              color: Colors.green,
+                            ),
                           ),
-                        ),
-                      ],
-                    );
-                  });
-            },
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-            leading: const Icon(Icons.exit_to_app),
-            title: const Text(
-              "Logout",
-              style: TextStyle(color: Colors.black),
-            ),
-          )
-
+                        ],
+                      );
+                    });
+              },
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              leading: const Icon(Icons.exit_to_app),
+              title: const Text(
+                "Logout",
+                style: TextStyle(color: Colors.black),
+              ),
+            )
           ],
         ),
       ),
@@ -234,7 +256,7 @@ class _TeacherHomepageState extends State<TeacherHomepage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => CreateQuiz(),
+                builder: (context) => ShortAnswerScreen(),
                 // builder: (context) => Scaffold(),
               ),
             );
@@ -242,7 +264,7 @@ class _TeacherHomepageState extends State<TeacherHomepage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => CreateAIQuiz(),
+                builder: (context) => Assignments(),
                 // builder: (context) => Scaffold(),
               ),
             );
@@ -251,75 +273,6 @@ class _TeacherHomepageState extends State<TeacherHomepage> {
         child: Icon(isCreateMode
             ? Icons.add
             : Icons.assignment), // Change icon based on mode
-      ),
-    );
-  }
-}
-
-class QuizTile extends StatelessWidget {
-  final String imageUrl, title, id, description;
-  final int noOfQuestions;
-
-  QuizTile(
-      {required this.title,
-      required this.imageUrl,
-      required this.description,
-      required this.id,
-      required this.noOfQuestions});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => QuizPlay(id),
-          ),
-        );
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 24),
-        height: 150,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Stack(
-            children: [
-              Image.network(
-                imageUrl,
-                fit: BoxFit.cover,
-                width: MediaQuery.of(context).size.width,
-              ),
-              Container(
-                color: Colors.black26,
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        description,
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500),
-                      )
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
       ),
     );
   }
