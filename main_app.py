@@ -22,7 +22,7 @@ import pandas as pd
 import transformers
 import keras_ocr
 import keras
-
+import base64
 from keras.models import load_model
 from keras.optimizers import Adam
 
@@ -267,7 +267,6 @@ async def predict_text():
 with open('/home/yuvraj/Coding/devopia/my_model.pkl', 'rb') as f:
     loaded_model = pickle.load(f)
 
-app = Flask(__name__)
 
 changing_columns=['internet','romantic','paid','activities','studytime','freetime','traveltime','goout','absences']
 binary_columns=['internet','romantic','paid','activities']
@@ -322,6 +321,13 @@ def give_graph():
     feat_importances = dict(sorted(feat_importances.items(), key=lambda item: item[1]))
     ranged_values=[i for i in range(len(feat_importances))]
     return jsonify({"len_feat_importance":ranged_values,"feat_importance":list(feat_importances.values()),"columns":columns})
+
+@app.route('/send_image', methods=['GET'])
+def send_image():
+    with open('/home/yuvraj/Coding/devopia_Overload_oblivion/graph.png', 'rb') as f:
+        image_data = f.read()
+    base64_image = base64.b64encode(image_data).decode('utf-8')
+    return jsonify({'image': base64_image})
 
 if __name__ == '__main__':
     app.run(debug=True)
