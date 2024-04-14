@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:devopia_overload_oblivion/Helper/helper_function.dart';
 import 'package:devopia_overload_oblivion/resources/auth_methods.dart';
+import 'package:devopia_overload_oblivion/screens/student_details.dart';
 import 'package:flutter/material.dart';
 import 'package:devopia_overload_oblivion/global/global_var.dart';
 import 'package:devopia_overload_oblivion/providers/teacher_provider.dart';
@@ -184,7 +185,20 @@ class _TeacherHomepageState extends State<TeacherHomepage> {
               "Logout",
               style: TextStyle(color: Colors.black),
             ),
-          )
+          ),
+           ListTile(
+            onTap:(){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
+            },
+            selectedColor: Theme.of(context).primaryColor,
+            selected: true,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            leading: const Icon(Icons.group),
+            title: const Text("Profile",style:TextStyle(color: Colors.black)),
+            
+            
+
+          ),
 
           ],
         ),
