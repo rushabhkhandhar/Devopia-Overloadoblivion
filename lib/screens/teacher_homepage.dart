@@ -11,8 +11,7 @@ import 'package:devopia_overload_oblivion/screens/create_ai_quiz.dart';
 import 'package:devopia_overload_oblivion/screens/create_quiz.dart';
 import 'package:devopia_overload_oblivion/screens/quiz_play.dart';
 import 'package:devopia_overload_oblivion/screens/user_type_selec.dart';
-import 'package:devopia_overload_oblivion/widgets/widgets.dart';
-import 'package:uuid/uuid.dart';
+
 
 class TeacherHomepage extends StatefulWidget {
    TeacherHomepage({super.key});
@@ -99,7 +98,7 @@ class _TeacherHomepageState extends State<TeacherHomepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromARGB(255, 175, 217, 255),
       appBar: AppBar(
       title: Text(
         'Hello, $name!',

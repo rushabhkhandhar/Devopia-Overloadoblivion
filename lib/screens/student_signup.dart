@@ -124,6 +124,7 @@ class _StudentSignupState extends State<StudentSignup> {
     );
     if (response.statusCode == 200) {
       var jsonData = jsonDecode(response.body);
+      print(jsonData);
       if (jsonData.containsKey('questions')) {
         for (var questionData in jsonData['questions']) {
           String question = questionData['question'];
@@ -153,42 +154,50 @@ class _StudentSignupState extends State<StudentSignup> {
     }
   }
 
-  getData() async {
-    final res = await http.post(
-      Uri.parse('${GlobalVariables.Url}/predict_changes'),
-       body: json.encode(<String, dynamic>{
-        'age': [_ageController],
-      'Medu':[Medu],
-      'Fedu':[Fedu],
-      'traveltime': [_travelTime],
-      'studytime': [ _studyTime],
-      'failures':[1],
-      'higher':[1],
-      'internet': [_internet],
-      'paid':[paid],
-      'activities':[activities],
-      'romantic':[1],
-      'freetime': [_freeTime],
-      'goout':[1],
-      'absences':[1],
-      "sex_F": [0],
-    'sex_M': [1],
-    "Mjob_at_home": [0],
-    "Mjob_health": [0],
-    "Mjob_other": [0],
-    "Mjob_services": [1],
-    "Mjob_teacher": [0],
-    "Fjob_at_home": [0],
-    "Fjob_health": [0],
-    "Fjob_other": [0],
-    "Fjob_services": [1],
-    "Fjob_teacher": [0]
-       }),
-      headers: <String, String>{'Content-Type': 'application/json'},
-      
-    );
-    print(jsonDecode(res.body));
+  
+   sendData() async {
+  final Map<String, dynamic> data = {
+     "age": [_ageController.text],
+  "Medu": [Medu],
+  "Fedu": [Fedu],
+  "traveltime": [_travelTime.text],
+  "studytime": [ _studyTime.text],
+  "failures": [0],
+  "paid": [1],
+  "activities": [1],
+  "higher": [1],
+  "internet": [1],
+  "romantic": [0],
+  "freetime": [3],
+  "goout": [3],
+  "absences": [4],
+  "sex_F": [0],
+  "sex_M": [1],
+  "Mjob_at_home": [0],
+  "Mjob_health": [0],
+  "Mjob_other": [0],
+  "Mjob_services": [1],
+  "Mjob_teacher": [0],
+  "Fjob_at_home": [0],
+  "Fjob_health": [0],
+  "Fjob_other": [0],
+  "Fjob_services": [1],
+  "Fjob_teacher": [0]
+  };
+
+  final response = await http.post(
+    Uri.parse('${GlobalVariables.Url}/predict_changes'),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode(data),
+  );
+
+  if (response.statusCode == 200) {
+    print('Data sent successfully!');
+    print(jsonDecode(response.body));
+  } else {
+    print('Request failed with status: ${response.statusCode}');
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -305,7 +314,7 @@ class _StudentSignupState extends State<StudentSignup> {
                 ),
                 TextField(
                   controller: _ageController,
-                  obscureText: true,
+                  obscureText: false,
                   decoration: const InputDecoration(
                     focusedBorder: UnderlineInputBorder(
                       borderSide:
@@ -319,7 +328,7 @@ class _StudentSignupState extends State<StudentSignup> {
                 const SizedBox(height: 16.0),
                 TextField(
                   controller: _travelTime,
-                  obscureText: true,
+                  obscureText: false,
                   decoration: const InputDecoration(
                     focusedBorder: UnderlineInputBorder(
                       borderSide:
@@ -333,7 +342,7 @@ class _StudentSignupState extends State<StudentSignup> {
                 const SizedBox(height: 16.0),
                 TextField(
                   controller: _studyTime,
-                  obscureText: true,
+                  obscureText: false,
                   decoration: const InputDecoration(
                     focusedBorder: UnderlineInputBorder(
                       borderSide:
@@ -347,7 +356,7 @@ class _StudentSignupState extends State<StudentSignup> {
                 const SizedBox(height: 16.0),
                 TextField(
                   controller: _internet,
-                  obscureText: true,
+                  obscureText: false,
                   decoration: const InputDecoration(
                     focusedBorder: UnderlineInputBorder(
                       borderSide:
@@ -361,7 +370,7 @@ class _StudentSignupState extends State<StudentSignup> {
                 const SizedBox(height: 16.0),
                 TextField(
                   controller: _freeTime,
-                  obscureText: true,
+                  obscureText: false,
                   decoration: const InputDecoration(
                     focusedBorder: UnderlineInputBorder(
                       borderSide:
@@ -586,9 +595,13 @@ class _StudentSignupState extends State<StudentSignup> {
                 const SizedBox(height: 45.0),
                 ElevatedButton(
                   onPressed: () async {
-                    getData().then();
                     
-
+                    sendData().then((value){
+                      getQuiz().then((value) {
+                        signUpStudent();
+                      });
+                    });
+                      
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromRGBO(31, 68, 255, 0.776),
