@@ -1,3 +1,4 @@
+import 'package:devopia_overload_oblivion/screens/ai_generated_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:devopia_overload_oblivion/global/global_var.dart';
@@ -156,46 +157,36 @@ class _AIQuizInputPageState extends State<AIQuizInputPage> {
                   },
                 ),
                 const SizedBox(height: 16.0),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Topic ID',
-                    border: OutlineInputBorder(),
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      enteredTopicID = int.parse(value);
-                    });
-                  },
-                ),
-                const SizedBox(height: 16.0),
                 BlueButton(
                     onTap: () async {
                       final response = await http.post(
-                        Uri.parse('${GlobalVariables.Url}/get_questions'),
-                        body: json
-                            .encode(<String, dynamic>{'grade': "10th Grade"}),
+                        Uri.parse('${GlobalVariables.Url}/quiz'),
+                        body: json.encode(<String, dynamic>{
+                          'difficulty': selectedDifficulty,
+                          'topic_id': 17
+                        }),
                         headers: <String, String>{
                           'Content-Type': 'application/json'
                         },
                       );
                       if (response.statusCode == 200) {
                         print(jsonDecode(response.body));
-                        // for (int i = 0; i < 5; i++) {
-                        //   uploadQuizData(
-                        //     jsonDecode(response.body)[i]['question'],
-                        //     jsonDecode(response.body)[i]['correct_answer'],
-                        //     jsonDecode(response.body)[i]["incorrect_answers"]
-                        //         [0],
-                        //     jsonDecode(response.body)[i]["incorrect_answers"]
-                        //         [1],
-                        //     jsonDecode(response.body)[i]["incorrect_answers"]
-                        //         [2],
-                        //   );
-                        // }
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => AIQuizPlay()),
-                        // );
+                        for (int i = 0; i < 5; i++) {
+                          uploadQuizData(
+                            jsonDecode(response.body)[i]['question'],
+                            jsonDecode(response.body)[i]['correct_answer'],
+                            jsonDecode(response.body)[i]["incorrect_answers"]
+                                [0],
+                            jsonDecode(response.body)[i]["incorrect_answers"]
+                                [1],
+                            jsonDecode(response.body)[i]["incorrect_answers"]
+                                [2],
+                          );
+                        }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AIQuizPlay()),
+                        );
                       } else {
                         print("Error");
                       }
