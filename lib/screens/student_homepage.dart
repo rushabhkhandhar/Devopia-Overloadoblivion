@@ -121,7 +121,9 @@ class _StudentHomepageState extends State<StudentHomepage> {
   StudentProvider studentProvider = StudentProvider();
 
   refreshUser() async {
-    await studentProvider.refreshStudent();
+    await studentProvider.refreshStudent().then((value) => setState(() {
+      
+    }));
   }
 
   String email = "";
