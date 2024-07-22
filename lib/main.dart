@@ -27,15 +27,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-    bool isSignedIn = false;
-    String userType ='';
+  bool isSignedIn = false;
+  String userType = '';
 
-    void initState() {
+  void initState() {
     super.initState();
     // getUserLoggedInStatus();
   }
   // void getUserLoggedInStatus() async {
-    
+
   //   HelperFunction.getUserLoggedInStatus().then((value) {
   //     if (value != null) {
   //       setState(() {
@@ -49,18 +49,17 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_)=>TeacherProvider()),
-        ChangeNotifierProvider(create: (_)=>StudentProvider()),
+        ChangeNotifierProvider(create: (_) => TeacherProvider()),
+        ChangeNotifierProvider(create: (_) => StudentProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Student-Teacher Portal',
         theme: ThemeData(
-          fontFamily: 'Inter',
+          fontFamily: 'OpenDyslexic',
           primarySwatch: Colors.blue,
         ),
-        home:   SplashScreen(
-         ),
+        home: SplashScreen(),
       ),
     );
   }
